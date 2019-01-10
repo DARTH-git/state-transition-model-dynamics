@@ -6,9 +6,9 @@ This GitHub repository provides the code explained in the paper:
 
 ## Full list of Contributors:
 
-  * [Eline Krijkamp](https://github.com/krijkamp)^CO 
+  * [Eline Krijkamp](https://github.com/krijkamp)* 
 
-  * [Fernando Alarid-Escudero](https://github.com/feralaes)^CO 
+  * [Fernando Alarid-Escudero](https://github.com/feralaes)* 
 
   * [Eva Enns](https://github.com/evaenns)
  
@@ -19,5 +19,5 @@ This GitHub repository provides the code explained in the paper:
   * [Hawre Jalal](https://github.com/hjalal)
 
   
- CO Equal contribution
+ * Equal contribution to this paper
 
