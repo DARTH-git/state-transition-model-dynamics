@@ -1,16 +1,23 @@
-# state-transition-model-dynamics
-This repository contains the R code from the paper: An alternative representation of state transition model dynamics. 
+# An alternative representation of state transition model dynamics:
+This GitHub repository provides the code explained in the paper: 
 
-Full list of Contributors:
+- Krijkamp EM, Alarid-Escudero F, Enns EA, Pechlivanoglou P, Hunink MGM, Jalal HJ. [An alternative representation of state transition model dynamics]
 
-Eline Krijkamp
 
-Fernando Alarid-Escudero
+## Full list of Contributors:
 
-Eva Enns
+  * [Eline Krijkamp]^CO(https://github.com/krijkamp) 
 
-Hawre Jalal
+  * [Fernando Alarid-Escudero]^CO(https://github.com/feralaes) 
 
-Myriam Hunink
+  * [Eva Enns](https://github.com/evaenns)
+ 
+  * Myriam Hunink 
 
-Petros Pechlivanoglou
+  * Petros Pechlivanoglou
+  
+  * [Hawre Jalal](https://github.com/hjalal)
+
+  
+ CO Equal contribution
+
