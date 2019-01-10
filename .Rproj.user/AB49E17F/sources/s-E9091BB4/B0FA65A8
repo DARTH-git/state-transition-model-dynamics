@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1547114695253.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B0FA65A8",
+    "lastKnownWriteTime" : 1531937529,
+    "last_content_update" : 1531937529,
+    "path" : "~/Google Drive/DARTH/Tutorials/CohortModels/R/STM_02.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "83,50",
+        "scrollLine" : "69"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

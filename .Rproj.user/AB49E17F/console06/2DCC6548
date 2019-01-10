@@ -1,0 +1,11 @@
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamics[?1034hMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ ## Initiali ze transition array
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamicsMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ a.A <- arra y(0, 
+bash: syntax error near unexpected token `('
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamicsMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$               dim = c(n.s, n.s, n.t + 1),
+bash: syntax error near unexpected token `('
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamicsMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$               dimnames = list(v.n, v.n, 0:n.t))
+bash: syntax error near unexpected token `('
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamicsMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ # Set first  slice of A with the initial state vector in its diagonal
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamicsMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ diag(a.A[,  , 1]) <- s0
+bash: syntax error near unexpected token `a.A[,'
+]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamicsMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ [KMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ 
