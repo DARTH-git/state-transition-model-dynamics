@@ -19,5 +19,5 @@ This GitHub repository provides the code explained in the paper:
   * [Hawre Jalal](https://github.com/hjalal)
 
   
- * Equal contribution to this paper
+ * *Equal contribution to this paper
 
