@@ -6,9 +6,9 @@ This GitHub repository provides the code explained in the paper:
 
 ## Full list of Contributors:
 
-  * [Eline Krijkamp](https://github.com/krijkamp)* 
+  * [Eline Krijkamp*](https://github.com/krijkamp) 
 
-  * [Fernando Alarid-Escudero](https://github.com/feralaes)* 
+  * [Fernando Alarid-Escudero*](https://github.com/feralaes)
 
   * [Eva Enns](https://github.com/evaenns)
  
