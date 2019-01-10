@@ -1,4 +1,4 @@
-# An alternative representation of state transition model dynamics:
+# An alternative representation of state transition model dynamics
 This GitHub repository provides the code explained in the paper: 
 
 - Krijkamp EM, Alarid-Escudero F, Enns EA, Pechlivanoglou P, Hunink MGM, Jalal HJ. [An alternative representation of state transition model dynamics]
