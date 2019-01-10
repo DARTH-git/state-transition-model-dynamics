@@ -130,7 +130,7 @@ a.A <- array(0, dim = c(n.s, n.s, n.t + 1),
 
 #### 05.1 Run Markov model ####
 # as described in the paper
-t05.1 <- Sys.time()
+t05.1 <- Sys.time() # Start the clock 
 diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagnal of A
 
 # run the model 
@@ -139,20 +139,20 @@ for(t in 1:n.t){                     # loop through the number of cycles
 }
 
 # calculating M from A 
-m.M_A <- t(colSums(a.A)) # sum over the colums of A and transpose 
+m.M_A <- t(colSums(a.A))   # sum over the colums of A and transpose 
 
-t05.1 = Sys.time() - t05.1
+t05.1 = Sys.time() - t05.1 # stop the clock and calculate duration
 
 #### 05.2 Run Markov model ####
 # creating both the matrix and array at the same time 
-t05.2 <- Sys.time()
+t05.2 <- Sys.time() # start the clock 
 for(t in 1:n.t){                     # loop through the number of cycles
   m.M[t + 1, ]   <- m.M[t, ] %*% m.P # estimate the state vector for cycle t + 1
   a.A[, , t + 1] <- m.M[t, ]  * m.P  # fill array A for t + 1 
 }
-t05.2 <- Sys.time() - t05.2
+t05.2 <- Sys.time() - t05.2 # stop the clock and calculate duration
 
-m.M_A == m.M # do the two approached give the same results?
+m.M_A == m.M  # do the two approached give the same results?
 t05.1 < t05.2 # is the first approach faster?
 
 
@@ -168,82 +168,91 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
 
 
 #### 07 Compute Cost-Effectiveness Outcomes ####
-#### 07.1 State rewards for each strategy ####
-## Vector of state utilities under usual care
-m.u.UC <- matrix(0, 
-                 nrow = n.s, ncol = n.s, 
+#### 07.1 State and transition rewards for each strategy ####
+
+## Matrix for utilities 
+m.U <- matrix(0, nrow = n.s, ncol = n.s, 
                  dimnames = list(v.n, v.n))
 
 # From H
-m.u.UC["H", "H"]    <- u.H
-m.u.UC["H", "S1"]   <- u.S1 - du.HS1
-m.u.UC["H", "D"]    <- u.D
+m.U["H", "H"]    <- u.H
+m.U["H", "S1"]   <- u.S1 - du.HS1
+m.U["H", "D"]    <- u.D
 # From S1
-m.u.UC["S1", "H"]   <- u.H
-m.u.UC["S1", "S1"]  <- u.S1 
-m.u.UC["S1", "S2"]  <- u.S2
-m.u.UC["S1", "D"]   <- u.D
+m.U["S1", "H"]   <- u.H
+m.U["S1", "S1"]  <- u.S1 
+m.U["S1", "S2"]  <- u.S2
+m.U["S1", "D"]   <- u.D
 # From S2
-m.u.UC["S2", "S1"]  <- u.S1
-m.u.UC["S2", "S2"]  <- u.S2
-m.u.UC["S2", "D"]   <- u.D
+m.U["S2", "S1"]  <- u.S1
+m.U["S2", "S2"]  <- u.S2
+m.U["S2", "D"]   <- u.D
 
-## Matrix of state costs under usual care
-m.c.UC <- matrix(0, 
+m.U_Tr = m.U_UC <- m.U  # Copy the result to the matrices
+# replate the utilities that are different in the treatment group
+# From H
+m.U_Tr["H", "S1"] <- u.Trt - du.HS1
+# From S1
+m.U_Tr["S1", "S1"] <- u.Trt
+# From S2
+m.U_Tr["S2", "S1"] <- u.Trt
+
+
+## Matrix of costs
+m.C_UC <- matrix(0, 
                  nrow = n.s, ncol = n.s, 
                  dimnames = list(v.n, v.n))
 # Fill in matrix
 # From H
-m.c.UC["H", "H"]  <- c.H 
-m.c.UC["H", "S1"] <- c.S1 + ic.HS1
-m.c.UC["H", "D"]  <- ic.D + c.D
+m.C_UC["H", "H"]  <- c.H 
+m.C_UC["H", "S1"] <- c.S1 + ic.HS1
+m.C_UC["H", "D"]  <- ic.D + c.D
 # From S1
-m.c.UC["S1", "H"]  <- c.H
-m.c.UC["S1", "S1"] <- c.S1
-m.c.UC["S1", "S2"] <- c.S2
-m.c.UC["S1", "D"]  <- ic.D
+m.C_UC["S1", "H"]  <- c.H
+m.C_UC["S1", "S1"] <- c.S1
+m.C_UC["S1", "S2"] <- c.S2
+m.C_UC["S1", "D"]  <- ic.D
 # From S2
-m.c.UC["S2", "S2"] <- c.S2
-m.c.UC["S2", "D"]  <- ic.D
+m.C_UC["S2", "S2"] <- c.S2
+m.C_UC["S2", "D"]  <- ic.D
 # From D
-m.c.UC["D", "D"] <- c.D
+m.C_UC["D", "D"] <- c.D
 
 ## Vector of state costs under new treatment
-m.c.Tr = m.c.UC # copy the results
+m.C_Tr = m.C_UC # copy the results
 # replace the cost values influences by treatment costs 
 # From S1
-m.c.Tr["S1", "S1"] <- c.S1 + c.Trt
-m.c.Tr["S1", "S2"] <- c.S2 + c.Trt
+m.C_Tr["S1", "S1"] <- c.S1 + c.Trt
+m.C_Tr["S1", "S2"] <- c.S2 + c.Trt
 # From S2
-m.c.Tr["S2", "S2"] <- c.S2 + c.Trt
+m.C_Tr["S2", "S2"] <- c.S2 + c.Trt
 
 
 #### 07.2 Expected QALYs and Costs per cycle for each strategy ####
 #### Expected QALYs and Costs per cycle ####
 ## Vector of qalys
-v.qaly.UC <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.u.UC))))
+v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.U_UC))))
 ## Vector of costs
-v.cost.UC <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.c.UC))))
-
+v.cost_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.C_UC))))
 
 ## Vector of qalys
-v.qaly.Tr <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.u.Tr))))
+v.qaly_Tr <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.U_Tr))))
 ## Vector of costs
-v.cost.Tr <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.c.Tr))))
+v.cost_Tr <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.C_Tr))))
 
 #### Discounted Total expected QALYs and Costs ####
-te.UC <- v.qaly.UC %*% v.dwe  # total (discounted) QALY 
-tc.UC <- v.cost.UC %*% v.dwc  # total (discounted) cost 
+te_UC <- v.qaly_UC %*% v.dwe  # total (discounted) QALY 
+tc_UC <- v.cost_UC %*% v.dwc  # total (discounted) cost 
 
-te.Tr <- v.qaly.Tr %*% v.dwe  # total (discounted) QALY 
-tc.Tr <- v.cost.Tr %*% v.dwc  # total (discounted) cost 
+te_Tr <- v.qaly_Tr %*% v.dwe  # total (discounted) QALY 
+tc_Tr <- v.cost_Tr %*% v.dwc  # total (discounted) cost 
 
 
 #### Cost-effectiveness analysis ####
 ### Vector of costs
-v.cost <- c(tc.UC, tc.Tr)
+v.cost <- c(tc_UC, tc_Tr)
 ### Vector of effectiveness
-v.qaly <- c(te.UC, te.Tr)
+v.qaly <- c(te_UC, te_Tr)
 
 ### Incremental outcomes
 delta.C <- v.cost[2] - v.cost[1]             # calculate incremental costs
@@ -262,3 +271,4 @@ table_cstm <- data.frame(
 rownames(table_cstm) <- v.names.str
 
 table_cstm  # print the table 
+
