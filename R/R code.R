@@ -106,34 +106,38 @@ a.A[, , 2:3] # shown for two cycles
 #### Equation 7    #### 
 # calculating M from A 
 m.M_A <- t(colSums(a.A))   # sum over the colums of A and transpose 
+m.M == m.M_A # check if they are exactly the same
 
-#### 05.2 Run Markov model ####
-# creating both the matrix and array at the same time 
-for(t in 1:n.t){                     # loop through the number of cycles
-  m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t)
-  m.M[t + 1, ]   <- m.M[t, ] %*% m.P # estimate the state vector for cycle t + 1
-  a.A[, , t + 1] <- m.M[t, ]  * m.P  # fill array A for t + 1 
+
+#### 05 Apply state and transtion rewards #### 
+#### 05.1 Create reward matrices for both costs and effects #### 
+m.R_costs  <- f.create_transition_reward_matrix_costs(v.params = v.params.init)
+m.R_effects <- f.create_transition_reward_matrix_effects(v.params = v.params.init)
+m.R_costs 
+m.R_effects 
+
+
+#### 05.2 Expected QALYs and Costs per cycle for each strategy ####
+#### Equation 9 ####
+a.O_costs <- a.O_effects <- array(0, dim = c(n.states, n.states, n.t + 1),
+             dimnames = list(v.n, v.n, 0:n.t))
+
+for(t in 1:n.t){ 
+a.O_costs[, , t]   <- a.A[, , t] * m.R_costs
+a.O_effects[, , t] <- a.A[, , t] * m.R_effects
 }
 
-
-
-
-
-#### 07 Compute Cost-Effectiveness Outcomes ####
-#### 07.1 State and transition rewards for each strategy ####
-m.R_costs  <- f.create_transition_reward_matrix_costs(v.params = v.params.init)
-m.R_effect <- f.create_transition_reward_matrix_effects(v.params = v.params.init)
-
-
-#### 07.2 Expected QALYs and Costs per cycle for each strategy ####
-#### Equation 10 in paper ####
 ## Vector of expected costs per cycle
-v.cost_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_costs))))
+#v.cost_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_costs))))
 ## Vector of expected QALYs per cycle
-v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_effect))))
+#v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_effect))))
 
-TC <- round(sum(v.cost_UC), 3) # total cost
-TE <- round(sum(v.qaly_UC), 3) # total QALYs
+#### Equation 10 ####
+v.Costs <- rowSums(t(colSums(a.O_costs)))
+v.QALYs <- rowSums(t(colSums(a.O_effects)))
+
+TC <- t(v.Costs) %*% v.dwc
+TE <- t(v.QALYs) %*% v.dwe
 
 v.Results <- c(TC, TE)
 names(v.Results) <- c("Costs", "Effect")
@@ -141,8 +145,7 @@ v.Results # print the results
 
 
 
-#### 06 Compute and Plot  ####
-#### 06.1 Cohort trace #####
+#### 06 Plot cohort trace  ####
 ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
   geom_line(size = 1.3) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
