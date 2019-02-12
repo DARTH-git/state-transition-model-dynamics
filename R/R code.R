@@ -5,21 +5,17 @@
 # 'State transition model dynamics TITLE' 
 # Authors: 
 # Please cite the article when using this code
-#
+################################################################################
+# Demonstrate the array appraoch using the Sick-Sicker model with age dependent
+# transition probabilities but without performing a cost-effectiveness analysis.
+################################################################################
 # To program this tutorial we made use of 
 # R version 3.5.1 (2018-7-02)
 # Platform: x86_64-apple-darwin15.6.0 (64-bit)
 # Running under: macOS Mojave 10.14
 # RStudio: Version 1.1.456 2009-2018 RStudio, Inc
-
 ################################################################################
-################# Code of Appendix A ###########################################
-################################################################################
-# Demonstrate the array appraoch using the Sick-Sicker model with age dependent
-# transition probabilities but without performing a cost-effectiveness analysis.
-
-################################# Initial setup ################################
-#rm(list = ls())  # remove any variables in R's memory 
+rm(list = ls())  # remove any variables in R's memory 
 
 ###01 Initial setup 
 #### 01.1 Load packages and functions ####
@@ -28,9 +24,11 @@ library(dplyr)    # to manipulate data
 library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
 library(scales)   # for dollar signs and commas
+library(tensorA)  # for tensor calculations 
 
 #### 01.1.2 Load functions ####
 source("functions/01_model-inputs_functions.R")
+source("functions/02_simulation-model_functions.R")
 
 #### 01.2 External parameters ####
 #### 01.2.1 General setup ####
@@ -54,27 +52,22 @@ v.r.asr  <- df.r.asr %>%
 
 #### 01.2.3 Generate initial set of base-case external parameters ####
 v.params.init <- f.generate_init_params()
-
 ## Create name of parameters
 v.names.params <- names(v.params.init)
-## Save base-case set of parameters
-write.csv(x = v.params.init, file = "data/01_init-params.csv")
 
 
 ### 02 Define and initialize matrices and vectors ####
-#### 02.1.2 Load functions ####
-source("functions/02_simulation-model_functions.R")
-
-#### 02.1 Transition probability MATRIX ####
-# Equation 1 in the paper 
-f.transition_prob_matrix(v.params = v.params.init, t = 1) # the transition probability matrix at the first cycle
+#### 02.1 Transition probability matrix ####
+#### Equation 1 #### 
+f.create_transition_prob_matrix(v.params = v.params.init, t = 1) # the m.P transition probability matrix at the first cycle
 
 #### 02.2 Initial state vector ####
 # The cohort start in the Healthy health state
 s0 <- c(H = 1, S1 = 0, S2 = 0, D = 0)
 s0
 
-#### 02.3 Cohort trace  - Equation 2 in the paper 
+#### 02.3 Cohort trace  
+#### Equation 2 in paper #### 
 ## Create the Markov trace matrix M capturing the proportion of the cohort in each state at each cycle
 # Initialize cohort trace
 m.M <- matrix(0, 
@@ -83,51 +76,69 @@ m.M <- matrix(0,
 
 m.M[1, ] <- s0 # store the initial state vector
 
-################################################################################
-############################## Matrix approach #################################
-################################################################################
-#### 03 Run Markov model - Equation 2 in the paper 
 
+#### 03 Matrix Approach    ####
 for(t in 1:n.t){  # loop through the number of cycles
   m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t) # create the transition probability matrix for the current cycle
+#### Equation 2   #### 
   m.M[t + 1, ] <- m.M[t, ] %*% m.P  # estimate the state vector for the next cycle (t + 1)
 }
 
 head(round(m.M, 3)) # show the first six lines of the Markov trace
 
-################################################################################
-############################## Array approach ##################################
-################################################################################
-# Initialize array
+#### 04 Array Approach     ####
 a.A <- array(0, dim = c(n.states, n.states, n.t + 1),
-             dimnames = list(v.n, v.n, 0:n.t))
-
-#### 05.1 Run Markov model ####
-# as described in the paper
-t05.1 <- Sys.time() # Start the clock 
+             dimnames = list(v.n, v.n, 0:n.t)) # Initialize array
 diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagnal of A
+#### Equation 3 in paper   #### 
+a.A[, , 1]
 
 # run the model 
 for(t in 1:n.t){                     # loop through the number of cycles
-  a.A[, , t + 1] <- colSums(a.A[, ,t]) * m.P  # fill array A for t + 1 
+  m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t) # create the transition probability matrix for the current cycle
+#### Equation 4 in paper   #### 
+  a.A[, , t + 1] <- colSums(a.A[, , t]) * m.P  # fill array A for t + 1 
 }
 
+#### Equation 5    #### 
+a.A[, , 2:3] # shown for two cycles
+
+#### Equation 7    #### 
 # calculating M from A 
 m.M_A <- t(colSums(a.A))   # sum over the colums of A and transpose 
 
-t05.1 = Sys.time() - t05.1 # stop the clock and calculate duration
-
 #### 05.2 Run Markov model ####
 # creating both the matrix and array at the same time 
-t05.2 <- Sys.time() # start the clock 
 for(t in 1:n.t){                     # loop through the number of cycles
+  m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t)
   m.M[t + 1, ]   <- m.M[t, ] %*% m.P # estimate the state vector for cycle t + 1
   a.A[, , t + 1] <- m.M[t, ]  * m.P  # fill array A for t + 1 
 }
-t05.2 <- Sys.time() - t05.2 # stop the clock and calculate duration
 
-m.M_A == m.M  # do the two approached give the same results?
-t05.1 < t05.2 # is the first approach faster?
+
+
+
+
+#### 07 Compute Cost-Effectiveness Outcomes ####
+#### 07.1 State and transition rewards for each strategy ####
+m.R_costs  <- f.create_transition_reward_matrix_costs(v.params = v.params.init)
+m.R_effect <- f.create_transition_reward_matrix_effects(v.params = v.params.init)
+
+
+#### 07.2 Expected QALYs and Costs per cycle for each strategy ####
+#### Equation 10 in paper ####
+## Vector of expected costs per cycle
+v.cost_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_costs))))
+## Vector of expected QALYs per cycle
+v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_effect))))
+
+TC <- round(sum(v.cost_UC), 3) # total cost
+TE <- round(sum(v.qaly_UC), 3) # total QALYs
+
+v.Results <- c(TC, TE)
+names(v.Results) <- c("Costs", "Effect")
+v.Results # print the results
+
 
 
 #### 06 Compute and Plot  ####
@@ -139,110 +150,4 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
   ylab("Proportion of the cohort") +
   theme_bw(base_size = 16) +
   theme()
-
-
-#### 07 Compute Cost-Effectiveness Outcomes ####
-#### 07.1 State and transition rewards for each strategy ####
-
-## Matrix for utilities 
-m.U <- matrix(0, nrow = n.s, ncol = n.s, 
-                 dimnames = list(v.n, v.n))
-
-# From H
-m.U["H", "H"]    <- u.H
-m.U["H", "S1"]   <- u.S1 - du.HS1
-m.U["H", "D"]    <- u.D
-# From S1
-m.U["S1", "H"]   <- u.H
-m.U["S1", "S1"]  <- u.S1 
-m.U["S1", "S2"]  <- u.S2
-m.U["S1", "D"]   <- u.D
-# From S2
-m.U["S2", "S1"]  <- u.S1
-m.U["S2", "S2"]  <- u.S2
-m.U["S2", "D"]   <- u.D
-
-m.U_Tr = m.U_UC <- m.U  # Copy the result to the matrices
-# replate the utilities that are different in the treatment group
-# From H
-m.U_Tr["H", "S1"] <- u.Trt - du.HS1
-# From S1
-m.U_Tr["S1", "S1"] <- u.Trt
-# From S2
-m.U_Tr["S2", "S1"] <- u.Trt
-
-
-## Matrix of costs
-m.C_UC <- matrix(0, 
-                 nrow = n.s, ncol = n.s, 
-                 dimnames = list(v.n, v.n))
-# Fill in matrix
-# From H
-m.C_UC["H", "H"]  <- c.H 
-m.C_UC["H", "S1"] <- c.S1 + ic.HS1
-m.C_UC["H", "D"]  <- ic.D + c.D
-# From S1
-m.C_UC["S1", "H"]  <- c.H
-m.C_UC["S1", "S1"] <- c.S1
-m.C_UC["S1", "S2"] <- c.S2
-m.C_UC["S1", "D"]  <- ic.D
-# From S2
-m.C_UC["S2", "S2"] <- c.S2
-m.C_UC["S2", "D"]  <- ic.D
-# From D
-m.C_UC["D", "D"] <- c.D
-
-## Vector of state costs under new treatment
-m.C_Tr = m.C_UC # copy the results
-# replace the cost values influences by treatment costs 
-# From S1
-m.C_Tr["S1", "S1"] <- c.S1 + c.Trt
-m.C_Tr["S1", "S2"] <- c.S2 + c.Trt
-# From S2
-m.C_Tr["S2", "S2"] <- c.S2 + c.Trt
-
-
-#### 07.2 Expected QALYs and Costs per cycle for each strategy ####
-#### Expected QALYs and Costs per cycle ####
-## Vector of qalys
-v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.U_UC))))
-## Vector of costs
-v.cost_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.C_UC))))
-
-## Vector of qalys
-v.qaly_Tr <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.U_Tr))))
-## Vector of costs
-v.cost_Tr <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.C_Tr))))
-
-#### Discounted Total expected QALYs and Costs ####
-te_UC <- v.qaly_UC %*% v.dwe  # total (discounted) QALY 
-tc_UC <- v.cost_UC %*% v.dwc  # total (discounted) cost 
-
-te_Tr <- v.qaly_Tr %*% v.dwe  # total (discounted) QALY 
-tc_Tr <- v.cost_Tr %*% v.dwc  # total (discounted) cost 
-
-
-#### Cost-effectiveness analysis ####
-### Vector of costs
-v.cost <- c(tc_UC, tc_Tr)
-### Vector of effectiveness
-v.qaly <- c(te_UC, te_Tr)
-
-### Incremental outcomes
-delta.C <- v.cost[2] - v.cost[1]             # calculate incremental costs
-delta.E <- v.qaly[2] - v.qaly[1]             # calculate incremental QALYs
-ICER    <- delta.C / delta.E                 # calculate the ICER
-results <- c(delta.C, delta.E, ICER)         # store the values in a new variable
-
-# Create full incremental cost-effectiveness analysis table
-table_cstm <- data.frame(
-  Costs = dollar(v.cost),
-  QALYs = round(v.qaly, 3),
-  `Incremental Costs` = c("", dollar(delta.C)),
-  `Incremental QALYS` = c("", round(delta.E, 3)),
-  ICER = c("", dollar(ICER))
-)
-rownames(table_cstm) <- v.names.str
-
-table_cstm  # print the table 
 

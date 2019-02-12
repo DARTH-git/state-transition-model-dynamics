@@ -63,7 +63,7 @@ f.create_transition_reward_matrix_costs <- function(v.params, t = 1){# User defi
     # Fill in matrix
     # From H
     m.R["H", "H"]   <- c.H
-    m.R["H", "S1"]  <- c.H
+    m.R["H", "S1"]  <- c.H + ic.HS1
     m.R["H", "S2"]  <- c.H
     m.R["H", "D"]   <- c.H + ic.D
     # From S1
@@ -82,7 +82,7 @@ f.create_transition_reward_matrix_costs <- function(v.params, t = 1){# User defi
     m.R["D", "S2"]  <- c.D
     m.R["D", "D"]   <- c.D 
     
-    return(m.P)
+    return(m.R)
   }
   )
 }
@@ -104,7 +104,7 @@ f.create_transition_reward_matrix_effects <- function(v.params, t = 1){# User de
     # Fill in matrix
     # From H
     m.R["H", "H"]   <- u.H
-    m.R["H", "S1"]  <- u.H + ic.HS1
+    m.R["H", "S1"]  <- u.H - du.HS1
     m.R["H", "S2"]  <- u.H
     m.R["H", "D"]   <- u.H 
     # From S1
@@ -123,7 +123,7 @@ f.create_transition_reward_matrix_effects <- function(v.params, t = 1){# User de
     m.R["D", "S2"]  <- u.D
     m.R["D", "D"]   <- u.D 
     
-    return(m.P)
+    return(m.R)
   }
   )
 }
