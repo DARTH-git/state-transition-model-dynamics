@@ -103,31 +103,26 @@ a.A <- array(0, dim = c(n.states, n.states, n.t + 1),
              dimnames = list(v.n, v.n, 0:n.t))
 
 #### 05.1 Run Markov model ####
-# as described in the paper
-t05.1 <- Sys.time() # Start the clock 
 diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagnal of A
 
 # run the model 
 for(t in 1:n.t){                     # loop through the number of cycles
+  m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t) # create the transition probability matrix for the current cycle
   a.A[, , t + 1] <- colSums(a.A[, ,t]) * m.P  # fill array A for t + 1 
 }
 
-# calculating M from A 
-m.M_A <- t(colSums(a.A))   # sum over the colums of A and transpose 
+a.A[,,1]
 
-t05.1 = Sys.time() - t05.1 # stop the clock and calculate duration
+# calculating M from A - # Equation 7 in paper 
+m.M_A <- t(colSums(a.A))   # sum over the colums of A and transpose 
 
 #### 05.2 Run Markov model ####
 # creating both the matrix and array at the same time 
-t05.2 <- Sys.time() # start the clock 
 for(t in 1:n.t){                     # loop through the number of cycles
   m.M[t + 1, ]   <- m.M[t, ] %*% m.P # estimate the state vector for cycle t + 1
   a.A[, , t + 1] <- m.M[t, ]  * m.P  # fill array A for t + 1 
 }
-t05.2 <- Sys.time() - t05.2 # stop the clock and calculate duration
 
-m.M_A == m.M  # do the two approached give the same results?
-t05.1 < t05.2 # is the first approach faster?
 
 
 #### 06 Compute and Plot  ####
@@ -143,63 +138,8 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
 
 #### 07 Compute Cost-Effectiveness Outcomes ####
 #### 07.1 State and transition rewards for each strategy ####
-
-## Matrix for utilities 
-m.U <- matrix(0, nrow = n.s, ncol = n.s, 
-                 dimnames = list(v.n, v.n))
-
-# From H
-m.U["H", "H"]    <- u.H
-m.U["H", "S1"]   <- u.S1 - du.HS1
-m.U["H", "D"]    <- u.D
-# From S1
-m.U["S1", "H"]   <- u.H
-m.U["S1", "S1"]  <- u.S1 
-m.U["S1", "S2"]  <- u.S2
-m.U["S1", "D"]   <- u.D
-# From S2
-m.U["S2", "S1"]  <- u.S1
-m.U["S2", "S2"]  <- u.S2
-m.U["S2", "D"]   <- u.D
-
-m.U_Tr = m.U_UC <- m.U  # Copy the result to the matrices
-# replate the utilities that are different in the treatment group
-# From H
-m.U_Tr["H", "S1"] <- u.Trt - du.HS1
-# From S1
-m.U_Tr["S1", "S1"] <- u.Trt
-# From S2
-m.U_Tr["S2", "S1"] <- u.Trt
-
-
-## Matrix of costs
-m.C_UC <- matrix(0, 
-                 nrow = n.s, ncol = n.s, 
-                 dimnames = list(v.n, v.n))
-# Fill in matrix
-# From H
-m.C_UC["H", "H"]  <- c.H 
-m.C_UC["H", "S1"] <- c.S1 + ic.HS1
-m.C_UC["H", "D"]  <- ic.D + c.D
-# From S1
-m.C_UC["S1", "H"]  <- c.H
-m.C_UC["S1", "S1"] <- c.S1
-m.C_UC["S1", "S2"] <- c.S2
-m.C_UC["S1", "D"]  <- ic.D
-# From S2
-m.C_UC["S2", "S2"] <- c.S2
-m.C_UC["S2", "D"]  <- ic.D
-# From D
-m.C_UC["D", "D"] <- c.D
-
-## Vector of state costs under new treatment
-m.C_Tr = m.C_UC # copy the results
-# replace the cost values influences by treatment costs 
-# From S1
-m.C_Tr["S1", "S1"] <- c.S1 + c.Trt
-m.C_Tr["S1", "S2"] <- c.S2 + c.Trt
-# From S2
-m.C_Tr["S2", "S2"] <- c.S2 + c.Trt
+m.R_costs <- f.create_transition_reward_matrix_costs(v.params = v.params.init)
+m.R_effect <- f.create_transition_reward_matrix_effects(v.params = v.params.init)
 
 
 #### 07.2 Expected QALYs and Costs per cycle for each strategy ####
