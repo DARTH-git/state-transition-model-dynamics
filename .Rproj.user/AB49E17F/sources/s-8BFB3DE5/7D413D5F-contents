@@ -2,8 +2,10 @@
 ### A brief report -  ## 2019 ##
 ################################################################################
 # This code forms the basis for the brief report: 
-# 'State transition model dynamics TITLE' 
-# Authors: 
+# An alternative representation of state transition model dynamics.
+# Authors: Eline Krijkamp^{co}, Fernando Alarid-Escudero^{co}, Eva A. Enns, 
+# Myriam G.M. Hunink, Petros Pechlivanoglou, Hawre Jalal.
+
 # Please cite the article when using this code
 ################################################################################
 # Demonstrate the array appraoch using the Sick-Sicker model with age dependent
@@ -67,7 +69,6 @@ s0 <- c(H = 1, S1 = 0, S2 = 0, D = 0)
 s0
 
 #### 02.3 Cohort trace  
-#### Equation 2 in paper #### 
 ## Create the Markov trace matrix M capturing the proportion of the cohort in each state at each cycle
 # Initialize cohort trace
 m.M <- matrix(0, 
@@ -90,13 +91,13 @@ head(round(m.M, 3)) # show the first six lines of the Markov trace
 a.A <- array(0, dim = c(n.states, n.states, n.t + 1),
              dimnames = list(v.n, v.n, 0:n.t)) # Initialize array
 diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagnal of A
-#### Equation 3 in paper   #### 
+#### Equation 3  #### 
 a.A[, , 1]
 
 # run the model 
 for(t in 1:n.t){                     # loop through the number of cycles
   m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t) # create the transition probability matrix for the current cycle
-#### Equation 4 in paper   #### 
+#### Equation 4    #### 
   a.A[, , t + 1] <- colSums(a.A[, , t]) * m.P  # fill array A for t + 1 
 }
 
@@ -113,6 +114,7 @@ m.M == m.M_A # check if they are exactly the same
 #### 05.1 Create reward matrices for both costs and effects #### 
 m.R_costs  <- f.create_transition_reward_matrix_costs(v.params = v.params.init)
 m.R_effects <- f.create_transition_reward_matrix_effects(v.params = v.params.init)
+#### Equation 8   #### 
 m.R_costs 
 m.R_effects 
 
@@ -142,7 +144,6 @@ TE <- t(v.QALYs) %*% v.dwe
 v.Results <- c(TC, TE)
 names(v.Results) <- c("Costs", "Effect")
 v.Results # print the results
-
 
 
 #### 06 Plot cohort trace  ####

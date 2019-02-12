@@ -5,13 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "501165323",
+    "hash" : "0",
     "id" : "666E1208",
     "lastKnownWriteTime" : 1547138619,
     "last_content_update" : 1547138619,
     "path" : "~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamics/README.md",
     "project_path" : "README.md",
     "properties" : {
+        "cursorPosition" : "3,83",
+        "scrollLine" : "0"
     },
     "relative_order" : 1,
     "source_on_save" : false,
