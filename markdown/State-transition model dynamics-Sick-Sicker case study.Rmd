@@ -40,7 +40,7 @@ rm(list = ls())  # remove any variables in R's memory
 In the Sick-Sicker model, we simulate a hypothetical cohort of 25-year-old individuals over a lifetime (or reaching age 100-years old) using 75 annual cycles, represented with `n.t`. The cohort start in the "Healthy" health state (denoted H). Healthy individuals are at risk of developing the illness, at which point they would transition to the first stage of the disease (the "Sick" health state, denoted S1). Individuals that become sick incur a one-time utility decrement of 0.01 (`du.HS1`), disutility of transitioning from H to S1) and a one-time cost of \$1,000 (`ic.HS1`) that reflect the acute impacts of developing the illness. Sick individuals are at risk of further progressing to a more severe stage (the Sicker health state, denoted S2), which is constant in this case example. There is a chance that individuals in the Sick state eventually recover and return back to the Healthy state. However, once an individual reaches the Sicker health state, they cannot recover; that is, the probability of transitioning to the "Sick" or "Healthy" health states from the Sicker health state is zero. Individuals in the "Healthy" state face background mortality that is age-specific (i.e., time-dependent). Sick and Sicker individuals face an increased mortality in the form of a hazard rate ratio (HR) of 3 and 10 times, respectively, on the background mortality rate. Sick and Sicker individuals also experience increased health care costs and reduced QoL compared to healthy individuals. Once simulated individuals die, they transition to the Dead health state (denoted D), where they remain. When an individual dies, they incur a one-time cost of \$2,000 (`ic.D`) that reflects the acute care that might be received immediately preceding death. The state-transition diagram of the Sick-Sicker model is shown in Figure \ref{fig:STM Sick-Sicker}. The evolution of the cohort is simulated in one-year discrete-time cycles. Both costs and QALYs are discounted at an annual rate of 3%.
 
 
-![Sick-Sicker \label{fig:STM Sick-Sicker}](figures/Sick-Sicker figure.png)
+![Sick-Sicker \label{fig:STM Sick-Sicker}](../figures/Sick-Sicker figure.png)
 
 
 
@@ -55,8 +55,8 @@ library(scales)   # for dollar signs and commas
 library(tensorA)  # for tensor calculations 
 
 #### 01.1.2 Load functions ####
-source("functions/01_model-inputs_functions.R")
-source("functions/02_simulation-model_functions.R")
+source("../functions/01_model-inputs_functions.R")
+source("../functions/02_simulation-model_functions.R")
 
 #### 01.2 External parameters ####
 #### 01.2.1 General setup ####
@@ -73,7 +73,7 @@ v.dwe <- 1 / ((1 + d.c) ^ (0:(n.t))) # vector with discount weights for QALYs
 v.s.init <- c(H = 1, S1 = 0, S2 = 0, D = 0) # initial state vector
 
 #### 01.2.2 All-cause age-, sex- and race- (ASR) specific mortality ####
-df.r.asr <- read.csv("data/01_all-cause-mortality-USA-2015.csv")
+df.r.asr <- read.csv("../data/01_all-cause-mortality-USA-2015.csv")
 v.r.asr  <- df.r.asr %>%
   dplyr::select(Total) %>%
   as.matrix()              # vector with mortality rates
