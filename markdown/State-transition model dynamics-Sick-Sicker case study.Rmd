@@ -13,8 +13,8 @@ author:
 - Hawre Jalal, MD, PhD^[University of Pittsburgh, Pittsburgh, PA, USA]
 date: "`r Sys.Date()`"
 output:
-  word_document: default
   pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -306,4 +306,6 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10))+
   theme()
 ```
+
+
 
