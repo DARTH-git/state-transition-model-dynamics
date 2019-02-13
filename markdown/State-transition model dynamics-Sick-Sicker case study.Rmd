@@ -54,7 +54,6 @@ In the Sick-Sicker model, we simulate a hypothetical cohort of 25-year-old indiv
 
 
 
-
 ###01 Initial setup 
 We start with loading the packages and functions needed. 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
@@ -72,7 +71,7 @@ source("../functions/02_simulation-model_functions.R")
 ```
 
 #### 01.2 External parameters ####
-In the external parameter set up we specify the staring age of the cohort, the number of cycles, the names of the health states and the discount rate used for costs and QALYs. The age specific mortality rate for those in the healthy state is based on the US overall mortality data from the Human Mortality Database. The base-case parameters are combined in a list using the `f.generate_init_params()` function. 
+In the external parameter set up we specify the staring age of the cohort, the number of cycles, the names of the health states and the discount rate used for costs and QALYs. The age specific mortality rate for those in the healthy state are based on the US overall mortality data from the Human Mortality Database. The base-case parameters are combined in a list using the `f.generate_init_params()` function. 
 
 ```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
 #### 01.2.1 General setup ####
@@ -102,7 +101,7 @@ v.names.params <- names(v.params.init)
 
 
 ### 02 Define and initialize matrices and vectors ####
-In this section we initialize the matrices and vectors used for storing the data. The transition probability matrix is initialized and filled for the current cycle using the function `f.create_transition_prob_matrix` with arguments `v.params` and `t`. The function starts with calculating the age-specific transition probabilities for the current cycle `t` and uses these parameters togehter with the parameters stored in `v.params.init` to fill the matrix. For the initiation of cycle 0 we use `t = 1`. The next step is to initialize the state vector `S0`. In the Sick-Sicker model all individuals start in the Healthy Health state. This state vector is used to inform the first row of initialized the Markov trace matrix `m.P`. 
+In this section we initialize the matrices and vectors used for storing the data. The transition probability matrix is initialized and filled for the current cycle using the function `f.create_transition_prob_matrix` with arguments `v.params` and `t`. The first part of the function calculates the age-specific transition probabilities for the current cycle `t`. In the second part is uses these parameters togehter with the parameters stored in `v.params.init` to fill the transition probability matrix. For the initiation of cycle 0 we set the time argument to 1, since `R` starts indexing at with 1. The next step is to initialize the state vector `s0`. In the Sick-Sicker model all individuals start in the Healthy health state. This state vector is used to inform the first row of initialized the cohort trace matrix `m.P`. 
 
 #### Equation 1
 ```{r, message = FALSE, warning = FALSE}
@@ -116,7 +115,7 @@ s0 <- c(H = 1, S1 = 0, S2 = 0, D = 0)
 s0
 
 #### 02.3 Cohort trace  
-## Create the Markov trace matrix m.M capturing the proportion of the cohort 
+## Create the Markov cohort trace matrix m.M capturing the proportion of the cohort 
 # in each state at each cycle
 
 m.M <- matrix(0,  # initialize cohort trace
@@ -142,7 +141,7 @@ for(t in 1:n.t){  # loop through the number of cycles
 When printing the first six rows of `m.M` we see that everyone stars in the Healthy health state and over time the cohort transitions towards the other three health states. Until cycle 5, the proportion in `S1` is increasing after which it starts decreasing, while the proportion in `S2` and `D` is increasing towards the end of the model. We now ran our model using the Matrix approach and have information about state occupation at each cycle. This information allows us to apply state rewards (e.g. `c.Healthy`, `u.Healthy`. `u.S1` etc.), but it is not possible to include the transition rewards (e.g. `ic.HS1`, `du.HS1` and `ic.D`). In order to include these rewards, we need to know when individuals made the transition. Therefore, in the next section we will explain the Array approach which makes it possible to include these rewards. 
 
 ```{r}
-head(round(m.M, 3)) # show the first six lines of the Markov trace
+head(round(m.M, 3)) # show the first six lines of the Markov cohort trace
 ```
 
 ### 04 Array approach  
@@ -194,6 +193,49 @@ Since a Markov model is stochastic, these two approached should give identical r
 ```{r, eval = FALSE, echo = FALSE}
 round(m.M, 10) == round(m.M_A, 10) # check if they are exactly the same
 ```
+
+#### 4.1 Array approach for a Microsimulation 
+The Array appraoch is not limited to state transition cohort models. Also for Microsimulation models this is very usefull. In fact our previously published code showing how to run a microsimulation already created code to keep track on how individuals transitioned and how the cohort trace can be extracted based on that. We use the code in the `Appendix D_online_supp.R` file of the paper and load it into our environment. 
+```{r, eval = TRUE, echo = FALSE}
+source("../R/Appendix D_online_supp.R") # load and run the Microsimulation of the Sick-Sicker model 
+```
+
+The structure `TS` generated by the `MicroSim` function shows which transition an individual made at each cycle, while `TR` gives the cohort trace of the microsimulation. From `TS` one can fill array `A` as is shown below. [DARTH: Any idea on how can we make this code more efficient to create array A from the MicroSim?]
+```{r, eval = TRUE, echo = TRUE }
+head(sim_no_trt$TS[1:4, 10:14])  # the transition array
+head(sim_no_trt$TR)              # the cohort trace from the microsimulation
+
+a.A_MicroSim <- array(0, dim = c(n.states, n.states, n.t + 1),
+             dimnames = list(v.n, v.n, 0:n.t)) # initialize array
+
+diag(a.A_MicroSim[, , 1]) <- s0 # 
+
+for (t in 2:n.t + 1){
+a.A_MicroSim["H", "H",  t] <- sum((sim_no_trt$TS[, t] == "H->H") , na.rm = TRUE) / n.i 
+a.A_MicroSim["H", "S1", t] <- sum((sim_no_trt$TS[, t] == "H->S1"), na.rm = TRUE) / n.i 
+a.A_MicroSim["H", "S2", t] <- sum((sim_no_trt$TS[, t] == "H->S2"), na.rm = TRUE) / n.i 
+a.A_MicroSim["H", "D",  t] <- sum((sim_no_trt$TS[, t] == "H->D") , na.rm = TRUE) / n.i 
+
+a.A_MicroSim["S1", "H",  t] <- sum((sim_no_trt$TS[, t] == "S1->H") , na.rm = TRUE) / n.i 
+a.A_MicroSim["S1", "S1", t] <- sum((sim_no_trt$TS[, t] == "S1->S1"), na.rm = TRUE) / n.i 
+a.A_MicroSim["S1", "S2", t] <- sum((sim_no_trt$TS[, t] == "S1->S2"), na.rm = TRUE) / n.i 
+a.A_MicroSim["S1", "D",  t] <- sum((sim_no_trt$TS[, t] == "S1->D") , na.rm = TRUE) / n.i 
+
+a.A_MicroSim["S1", "H",  t] <- sum((sim_no_trt$TS[, t] == "S2->H") , na.rm = TRUE) / n.i 
+a.A_MicroSim["S2", "S1", t] <- sum((sim_no_trt$TS[, t] == "S2->S1"), na.rm = TRUE) / n.i 
+a.A_MicroSim["S2", "S2", t] <- sum((sim_no_trt$TS[, t] == "S2->S2"), na.rm = TRUE) / n.i 
+a.A_MicroSim["S2", "D",  t] <- sum((sim_no_trt$TS[, t] == "S2->D") , na.rm = TRUE) / n.i 
+
+a.A_MicroSim["D", "H",  t] <- sum((sim_no_trt$TS[, t] == "D->H") , na.rm = TRUE) / n.i 
+a.A_MicroSim["D", "S1", t] <- sum((sim_no_trt$TS[, t] == "D->S1"), na.rm = TRUE) / n.i 
+a.A_MicroSim["D", "S2", t] <- sum((sim_no_trt$TS[, t] == "D->S2"), na.rm = TRUE) / n.i 
+a.A_MicroSim["D", "D",  t] <- sum((sim_no_trt$TS[, t] == "D->D") , na.rm = TRUE) / n.i 
+}
+
+a.A_MicroSim[, , 1:3]
+```
+
+
 
 ### 05 Apply state and transition rewards 
 We now showed how to run a state-transition cohort model using the Array approach and how to interpret or summarize the results. In this section we demonstrate how to apply state and transition rewards. We start by initiating and filling two matrices for both costs and effects. The function `f.create_transition_reward_matrix_costs` is used to create a matrix of state and transition costs. This function is informed by the vector `v.params.init` and since our state and transition rewards are not time dependent we don't need an argument for time. The costs on the diagonal are the costs for staying one cycle in that state, while the costs off the diagonal are the costs of staying one cycle in that stated plus the transition costs.  The function `f.create_transition_reward_matrix_effects` does the same but then for utilities. 
