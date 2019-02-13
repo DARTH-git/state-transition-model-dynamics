@@ -7,15 +7,16 @@
     "folds" : "",
     "hash" : "0",
     "id" : "E9BC0C35",
-    "lastKnownWriteTime" : 1550060975,
-    "last_content_update" : 1550060975466,
+    "lastKnownWriteTime" : 1550064700,
+    "last_content_update" : 1550064700050,
     "path" : "~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamics/markdown/State-transition model dynamics-Sick-Sicker case study.Rmd",
     "project_path" : "markdown/State-transition model dynamics-Sick-Sicker case study.Rmd",
     "properties" : {
-        "cursorPosition" : "189,0",
+        "cursorPosition" : "217,465",
+        "docOutlineSize" : "44.54365063114908",
         "docOutlineVisible" : "1",
         "last_setup_crc32" : "31874EF3bb338d19",
-        "scrollLine" : "189"
+        "scrollLine" : "211"
     },
     "relative_order" : 1,
     "source_on_save" : false,

@@ -1,14 +1,20 @@
 ---
 title: "State-transition model dynamic - Sick-Sicker case study"
-author: 
-  - Eline Krijkamp^[Equal contribution to this paper], MSc^[Department of Epidemiology, Erasmus MC, University Medical Center, Rotterdam, The Netherlands]
-  - Fernando Alarid-Escudero$^1$, PhD^[Division of Health Policy and Management, University of Minnesota School of Public Health, Minneapolis, MN, USA]
-  - Eva A. Enns, PhD$^3$
-  - Myriam G.M. Hunink, PhD$^2$^[Center for Health Decision Sciences, Harvard T.H. Chan School of Public Health, Boston, USA]
-  - Petros Pechlivanoglou, PhD^[The Hospital for Sick Children, Toronto and University of Toronto, Toronto, Ontario, Canada]
-  - Hawre Jalal, MD, PhD^[University of Pittsburgh, Pittsburgh, PA, USA]
-date: '`r Sys.Date()`'
-output: pdf_document
+author:
+- Eline Krijkamp^[Equal contribution to this paper], MSc^[Department of Epidemiology,
+  Erasmus MC, University Medical Center, Rotterdam, The Netherlands]
+- Fernando Alarid-Escudero$^1$, PhD^[Division of Health Policy and Management, University
+  of Minnesota School of Public Health, Minneapolis, MN, USA]
+- Eva A. Enns, PhD$^3$
+- Myriam G.M. Hunink, PhD$^2$^[Center for Health Decision Sciences, Harvard T.H. Chan
+  School of Public Health, Boston, USA]
+- Petros Pechlivanoglou, PhD^[The Hospital for Sick Children, Toronto and University
+  of Toronto, Toronto, Ontario, Canada]
+- Hawre Jalal, MD, PhD^[University of Pittsburgh, Pittsburgh, PA, USA]
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Authors: 
 # Please cite the article when using this code
 ################################################################################
-# Demonstrate the array appraoch using the Sick-Sicker model with age dependent
+# Demonstrate the arrayapproachusing the Sick-Sicker model with age dependent
 # transition probabilities but without performing a cost-effectiveness analysis.
 ################################################################################
 # To program this tutorial we made use of 
@@ -119,7 +125,7 @@ m.M <- matrix(0,  # initialize cohort trace
 
 m.M[1, ] <- s0   # store the initial state vector
 ```
-Now we specified all parameters for the general set up, we specified our input parameters, initialized all structures and fill the transition probabilty matrix `m.P` and the first row of our Cohort trace `m.M`. This allows us to start running the Markov model. 
+Now we specified all parameters for the general set up, we specified our input parameters, initialized all structures and fill the transition probability matrix `m.P` and the first row of our Cohort trace `m.M`. This allows us to start running the Markov model. 
 
 ### 03 Matrix approach  
 In this section we show how we can run the Markov model for all cycles. The calculation shown in Equation 2 needs to be performed for all cycles. Therefore, we create a loop starting at `t = 1` until `t = n.t`. Since our transition probabilities are depending on the age of the individuals in the cohort (e.g. we use age dependent mortality rates), we need to update the transition probability matrix `m.P` every cycle. This cycle dependent matrix is used for the matrix multiplication, specified in `R` with `%*%`, with the cohort trace, `m.M[t, ]` to fill the next row of the `m.M[t + 1, ]`. 
@@ -133,18 +139,18 @@ for(t in 1:n.t){  # loop through the number of cycles
 }
 ```
 
-When printing the first six rows of `m.M` we see that everyone stars in the Healthy health state and over time the cohort transitions towards the other three health states. Until cycle 5, the proportion in `S1` is increasig after which it starts decreasing, while the proportion in `S2` and `D` is increasing towards the end of the model. We now ran our model using the Matrix approach and have information about state occupation at each cycle. This information allows us to apply state rewards (e.g. `c.Healthy`, `u.Healthy`. `u.S1` etc.), but it is not possible to include the transition rewards (e.g. `ic.HS1`, `du.HS1` and `ic.D`). In order to include these rewards we need to know when individuals made the transition. Therefore, in the next section we will explain the Array approach which makes it possible to include these rewards. 
+When printing the first six rows of `m.M` we see that everyone stars in the Healthy health state and over time the cohort transitions towards the other three health states. Until cycle 5, the proportion in `S1` is increasing after which it starts decreasing, while the proportion in `S2` and `D` is increasing towards the end of the model. We now ran our model using the Matrix approach and have information about state occupation at each cycle. This information allows us to apply state rewards (e.g. `c.Healthy`, `u.Healthy`. `u.S1` etc.), but it is not possible to include the transition rewards (e.g. `ic.HS1`, `du.HS1` and `ic.D`). In order to include these rewards, we need to know when individuals made the transition. Therefore, in the next section we will explain the Array approach which makes it possible to include these rewards. 
 
 ```{r}
 head(round(m.M, 3)) # show the first six lines of the Markov trace
 ```
 
 ### 04 Array approach  
-The Array approach starts similar as the Matrix approach, meaning that secion 01 and 02 are identical for the two appraoched. The biggest difference between Matrix and array appraoch are the dimensions of the structure to store the dynamics of the cohort. While in the Matrix appoarch, we stored all information in matrix `m.M` of size `n.states` x  `n.states`, in this appraoch we add an dimension for time resulting in an array with dimensions `n.states` x  `n.states` x `n.t `. In `R` indexing start at 1, therefore, we initialize the array `a.A` using `n.state` + 1 to allow storing the results from cycle 0 until cycle `n.t`. The initial state vectors `s0` is used to inform the initial cycle of the array. 
+The Array approach starts similar as the Matrix approach, meaning that secion 01 and 02 are identical for the two appraoches. The biggest difference between Matrix and array approach are the dimensions of the structure to store the dynamics of the cohort. While in the Matrix appoarch, we stored all information in matrix `m.M` of size `n.states` x  `n.states`, in this approach we add an dimension for time resulting in an array with dimensions `n.states` x  `n.states` x `n.t `. In `R` indexing start at 1, therefore, we initialize the array `a.A` using `n.state` + 1 to allow storing the results from cycle 0 until cycle `n.t`. The initial state vectors `s0` is used to inform the initial cycle of the array. 
 ```{r, message = FALSE, warning = FALSE}
 a.A <- array(0, dim = c(n.states, n.states, n.t + 1),
              dimnames = list(v.n, v.n, 0:n.t)) # initialize array
-diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagnal of A
+diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagonal of A
 ```
 
 #### Equation 3 & 4  
@@ -163,17 +169,18 @@ for(t in 1:n.t){                     # loop through the number of cycles
 ```
 
 #### Equation 5  
-To get an idea about how the information in `a.A` looks like we print it first three cycles. Like in the transition probability matrix `m.P`, the rows specify in which health state the individual started at the beginning of the cycle, while the columns inform you about where indidividual transitioned to. In cycle 0 everyone started in the healthy health states. At cycle 1 we can see that `r a.A["H","H", "1"]` of the cohort stayed healthy, `r a.A["H","S1", "1"]` transitioned from Healthy to Sick and ` r a.A["H","D", "1"]` died. Indeed, this looks very similar to the transition probabilities in this case example. From cycle 2 and onwards the information in `a.A` becomes more interesting. In cycle 2, we see that `r a.A["H","S1", "2"]` of the cohort stayed healthy, `r a.A["H","S1", "2"]` transitioned from Healthy towards Sick and `r a.A["H","D", "2"]` died while they started out healthy. In addition we see that `r a.A["S1","H", "2"]` of the cohort recoved from Healthy. `r a.A["S1","S1", "2"]` stayed Sick, `r a.A["S1","S2", "2"]` became Sicker out of Sick and `r a.A["S1","D", "2"]` died from Sick. All these values sum to 1 since we are still describing what happens to the cohort over time. 
+To get an idea about how the information in `a.A` looks like we print it first three cycles. Like in the transition probability matrix `m.P`, the rows specify in which health state the individual started at the beginning of the cycle, while the columns inform you about where individuals transitioned to. In cycle 0 everyone started in the healthy health states. At cycle 1 we can see that `r round(a.A["H","H", "1"], 4)` of the cohort stayed healthy, `r round(a.A["H","S1", "1"], 4)` transitioned from Healthy to Sick and ` r round(a.A["H","D", "1"], 4)` died. Indeed, this looks very similar to the transition probabilities in this case example. From cycle 2 and onwards the information in `a.A` becomes more interesting. In cycle 2, we see that 0.7208 of the cohort stayed healthy, 0.1273 transitioned from Healthy towards Sick and 0.00084 died while they started out healthy. In addition, we see that 0.075 of the cohort recovered from Healthy. 0.0588 stayed Sick, 0.0158 became Sicker out of Sick and 0.00045 died from Sick. All these values sum to 1 since we are still describing what happens to the cohort over time. 
+
 
 ```{r, message = FALSE, warning = FALSE}
 a.A[, , 1:3] # shown for two cycles
-sum(a.A[, , 3])
+sum(a.A[, , 3]) # sum for t = 3
 ```
 
 #### Equation 7 
 When you sum the values in a column of `a.A`, e.g. Sick, you get which proportion of the cohort was in Sick at the end of that cycle. 
 ```{r}
-sum(a.A[, "S1", 3])
+sum(a.A[, "S1", 3]) # sum the column of S1 at t = 3
 ```
 
 By using the `colSums` function, summing over all columns of `a.A` we can do this for all points in time and when we transpose these results we get the traditional cohort trace `m.M`. Here names `m.M_A` to indicate it is generated via the Array approach.   
@@ -182,26 +189,33 @@ By using the `colSums` function, summing over all columns of `a.A` we can do thi
 m.M_A <- t(colSums(a.A))   # sum over the columns of a.A and transpose 
 ```
 
-Since a Markov model is stocastic, these two approached should give identical resulst. We check this using the `==` function. We use rounding on 10 decimals, to avoid wrong `FALSE` restuls that have to do with floting point comparison issues. This means that functions allows you to test for equality with a specified difference tolerance.
+Since a Markov model is stochastic, these two approached should give identical resulst. We check this using the `==` function. We use rounding on 10 decimals, to avoid wrong `FALSE` results that have to do with floating point comparison issues. This means that functions allows you to test for equality with a specified difference tolerance.
 
 ```{r, eval = FALSE, echo = FALSE}
 round(m.M, 10) == round(m.M_A, 10) # check if they are exactly the same
 ```
 
-### 05 Apply state and transtion rewards 
+### 05 Apply state and transition rewards 
+We now showed how to run a state-transition cohort model using the Array approach and how to interpret or summarize the results. In this section we demonstrate how to apply state and transition rewards. We start by initiating and filling two matrices for both costs and effects. The function `f.create_transition_reward_matrix_costs` is used to create a matrix of state and transition costs. This function is informed by the vector `v.params.init` and since our state and transition rewards are not time dependent we don't need an argument for time. The costs on the diagonal are the costs for staying one cycle in that state, while the costs off the diagonal are the costs of staying one cycle in that stated plus the transition costs.  The function `f.create_transition_reward_matrix_effects` does the same but then for utilities. 
+
+In this Sick-Sicker example we use three different functions one for creating a transition probability matrix, one for creating a cost matrix and one for the effect matrix. Since these functions are based on the same information, one could decide to reduce the number of functions by combining all these steps. 
+
 ```{r, message = FALSE, warning = FALSE}
 #### 05.1 Create reward matrices for both costs and effects #### 
 m.R_costs   <- f.create_transition_reward_matrix_costs(v.params = v.params.init)
 m.R_effects <- f.create_transition_reward_matrix_effects(v.params = v.params.init)
 ```
 
-#### Equation 8   
+#### Equation 8  
+These matrices look as follow. We see that staying healthy costs \$2000, while someone that transitions from healthy towards sick costs makes \$3000. In the effects matrix we see that an individual gets a utility of 1 assign for staying healthy, while when the individual transitions towards Sick the decrement of `ic.HS1` is included. 
+
 ```{r, message = FALSE, warning = FALSE}
 m.R_costs    # show the reward matrix for costs
 m.R_effects  # show the reward matrix for effects
 ```
 
 #### Equation 9 
+In this section we create outcome array `a.O`, one for costs `a.O_costs` and one for effects `a.O_effects`. These arrays show the costs and QALYs generated with each transition at each cycle. By iteratively element-wise multiplication of the reward matrices with `a.A` we can fill the outcome arrays.  Again, we are now showing all these steps in a step wise approach, resulting in having a couple of loops for time. This can all be combined in one iterative process. 
 ```{r, message = FALSE, warning = FALSE}
 #### 05.2 Expected QALYs and Costs per cycle for each strategy ####
 a.O_costs <- a.O_effects <- array(0, dim = c(n.states, n.states, n.t + 1),
