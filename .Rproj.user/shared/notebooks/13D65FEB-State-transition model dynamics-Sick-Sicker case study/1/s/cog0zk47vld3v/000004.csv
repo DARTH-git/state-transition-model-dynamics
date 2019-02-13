@@ -1,0 +1,6 @@
+"0","for(t in 1:n.t){  # loop through the number of cycles"
+"0","  # create the transition probability matrix for the current cycle"
+"0","  m.P <- f.create_transition_prob_matrix(v.params = v.params.init, t = t) "
+"0","  # estimate the state vector for the next cycle (t + 1)"
+"0","  m.M[t + 1, ] <- m.M[t, ] %*% m.P   # Equation 2   "
+"0","}"
