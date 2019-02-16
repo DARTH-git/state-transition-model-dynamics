@@ -14,7 +14,7 @@ This GitHub repository provides the code explained in the paper:
  
   * Myriam Hunink 
 
-  * Petros Pechlivanoglou
+  * [Petros Pechlivanoglou](https://github.com/ppehli)
   
   * [Hawre Jalal](https://github.com/hjalal)
 
