@@ -1,0 +1,8 @@
+"0","#### 05.2 Expected QALYs and Costs per cycle for each strategy ####"
+"0","a.O_costs <- a.O_effects <- array(0, dim = c(n.states, n.states, n.t + 1),"
+"0","             dimnames = list(v.n, v.n, 0:n.t))"
+"0","for(t in 1:n.t){ "
+"0","# element-wise-multiplication of array A with the rewards matrices"
+"0","a.O_costs[, , t]   <- a.A[, , t] * m.R_costs   "
+"0","a.O_effects[, , t] <- a.A[, , t] * m.R_effects "
+"0","}"

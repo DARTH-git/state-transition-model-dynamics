@@ -1,5 +1,5 @@
 ---
-title: "State-transition model dynamic - Sick-Sicker case study"
+title: "An alternative representation of state-transition model dynamics - Sick-Sicker case study"
 author:
 - Eline Krijkamp^[Equal contribution to this paper], MSc^[Department of Epidemiology,
   Erasmus MC, University Medical Center, Rotterdam, The Netherlands]
@@ -26,11 +26,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ### A brief report -  ## 2019 ##
 ################################################################################
 # This code forms the basis for the brief report: 
-# 'State transition model dynamics TITLE' 
-# Authors: 
+# 'An alternative representation of state-transition model dynamics' 
 # Please cite the article when using this code
 ################################################################################
-# Demonstrate the arrayapproachusing the Sick-Sicker model with age dependent
+# Demonstrate the array approach using the Sick-Sicker model with age dependent
 # transition probabilities but without performing a cost-effectiveness analysis.
 ################################################################################
 # To program this tutorial we made use of 
@@ -70,7 +69,7 @@ source("../functions/01_model-inputs_functions.R")
 source("../functions/02_simulation-model_functions.R")
 ```
 
-#### 01.2 External parameters ####
+#### 01.2 External parameters
 In the external parameter set up we specify the staring age of the cohort, the number of cycles, the names of the health states and the discount rate used for costs and QALYs. The age specific mortality rate for those in the healthy state are based on the US overall mortality data from the Human Mortality Database. The base-case parameters are combined in a list using the `f.generate_init_params()` function. 
 
 ```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
