@@ -32,7 +32,7 @@ rm(list = ls())  # remove any variables in R's memory
 ```
 
 ## Simple 3-state model
-In this simple 3-state model, we simulate a hypothetical cohort of 70-year-old individuals over a lifetime using 50 annual cycles, represented with `n.t`.The healthy individuals can become sick, which makes them transition to the sick health state or they can die. Sick individuals can recover, transitioning back to healthy, stay sick or die. Each health state is associated with utilities and costs, state rewards. In addition to these state rewards, transition rewards apply. Becoming sick is associated with a disability as well as some costs. Also transitioning to dead is associated with a one-time costs. The model 
+In this simple 3-state model, we simulate a hypothetical cohort of 70-year-old individuals over a lifetime using 50 annual cycles, represented with `n.t`.The healthy individuals can become sick, which makes them transition to the sick health state or they can die. Sick individuals can recover, transitioning back to healthy, stay sick or die. Each health state is associated with utilities and costs, state rewards. In addition to these state rewards, transition rewards apply. Becoming sick is associated with a disability as well as some costs. Also transitioning to dead is associated with a one-time costs. The model parameters are described in the table below.
 
 
 |           **Parameter**            |  **R name** |   **Value**   |
