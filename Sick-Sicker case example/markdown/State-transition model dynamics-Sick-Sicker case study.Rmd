@@ -125,7 +125,7 @@ m.M[1, ] <- s0   # store the initial state vector
 ```
 Now we specified all parameters for the general set up, we specified our input parameters, initialized all structures and fill the transition probability matrix `m.P` and the first row of our Cohort trace `m.M`. This allows us to start running the Markov model. 
 
-### 03 Matrix approach  
+### 03 Traditional cohort trace approach  
 In this section we show how we can run the Markov model for all cycles. The calculation shown in Equation 2 needs to be performed for all cycles. Therefore, we create a loop starting at `t = 1` until `t = n.t`. Since our transition probabilities are depending on the age of the individuals in the cohort (e.g. we use age dependent mortality rates), we need to update the transition probability matrix `m.P` every cycle. This cycle dependent matrix is used for the matrix multiplication, specified in `R` with `%*%`, with the cohort trace, `m.M[t, ]` to fill the next row of the `m.M[t + 1, ]`. 
 #### Equation 2   
 ```{r, message = FALSE, warning = FALSE}

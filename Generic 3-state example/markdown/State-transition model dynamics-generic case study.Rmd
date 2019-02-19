@@ -72,8 +72,8 @@ library(scales)   # for dollar signs and commas
 library(tensorA)  # for tensor calculations 
 
 #### 01.1.2 Load functions ####
-source("../functions/generic example/01_model-inputs_functions.R")
-source("../functions/generic example/02_simulation-model_functions.R")
+source("../functions/01_model-inputs_functions.R")
+source("../functions/02_simulation-model_functions.R")
 ```
 
 #### 01.2 External parameters
