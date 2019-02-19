@@ -41,14 +41,14 @@ In this simple 3-state model, we simulate a hypothetical cohort of 70-year-old i
 | Names of health states ($n$)       | `v.n`       | H, S, D       |
 | Annual discount rate (costs/QALYs) | `d.c`/`d.e` |  3%           |
 | Annual transition probabilities    |             |               |
-| - Disease onset (H to S)           | `p.HS1`     |  0.15         |
-| - Recovery (S to H)                | `p.S1H`     |  0.5          |
+| - Disease onset (H to S)           | `p.HS`      |  0.17         |
+| - Recovery (S to H)                | `p.SH`      |  0.35         |
 | Annual mortality                   |             |               |
-| - All-cause mortality (H to D)     | `p.HD`      |  0.05         |
-| - Disease specific mortality (S to D)| `p.SD`    |  0.10         |
+| - All-cause (H to D)               | `p.HD`      |  0.05         |
+| - Disease specific (S to D)        | `p.SD`      |  0.10         |
 | Annual costs                       |             |               |
 | - Healthy individuals              | `c.H`       |  $1,000       |
-| - Sick individuals                 | `c.S1`      |  $3,000       |
+| - Sick individuals                 | `c.S`       |  $3,000       |
 | - Dead individuals                 | `c.D`       |  $0           |
 | Utility weights                    |             |               |
 | - Healthy individuals              | `u.H`       |  1.00         |
