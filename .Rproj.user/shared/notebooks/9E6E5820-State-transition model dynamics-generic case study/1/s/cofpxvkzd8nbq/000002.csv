@@ -1,4 +1,0 @@
-"0","## Vector of expected costs per cycle"
-"0","#v.cost_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_costs))))"
-"0","## Vector of expected QALYs per cycle"
-"0","#v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_effect))))"

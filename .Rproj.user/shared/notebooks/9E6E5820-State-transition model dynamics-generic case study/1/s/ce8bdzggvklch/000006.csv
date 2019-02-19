@@ -1,8 +1,0 @@
-"0","ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +"
-"0","  geom_line(size = 1.3) +"
-"0","  scale_color_discrete(l = 50, name = ""Health state"", h = c(45, 365)) +"
-"0","  xlab(""Cycle"") +"
-"0","  ylab(""Proportion of the cohort"") +"
-"0","  theme_bw(base_size = 16) +"
-"0","  scale_x_continuous(name = ""Cycles"", limits = c(0, n.t), breaks = seq(0, n.t, 10))+"
-"0","  theme()"
