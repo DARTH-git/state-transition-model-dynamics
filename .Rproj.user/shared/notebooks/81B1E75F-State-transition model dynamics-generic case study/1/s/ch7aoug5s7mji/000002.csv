@@ -1,0 +1,2 @@
+"0","# calculating M from A "
+"0","m.M_A <- t(colSums(a.A))   # sum over the columns of a.A and transpose "

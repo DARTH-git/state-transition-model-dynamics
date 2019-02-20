@@ -1,4 +1,6 @@
-# functions of the model for the 
+#------------------------------------------------------#
+#### Generate the transition probability matrix     ####
+#------------------------------------------------------#
 
 f.create_transition_prob_matrix <- function(df.params){# User defined
   ### Arguments:  
@@ -6,7 +8,6 @@ f.create_transition_prob_matrix <- function(df.params){# User defined
   ### Returns
   #     m.P: the transition probability matrix 
   with(as.list(df.params), {
-    #### Create age-specific transition matrices ####
     # Initialize matrix
     m.P <- matrix(NA, 
                   nrow = n.states, ncol = n.states, 
@@ -31,14 +32,16 @@ f.create_transition_prob_matrix <- function(df.params){# User defined
   )
 }
 
+#------------------------------------------------------#
+#### Generate the reward matrix for costs          ####
+#------------------------------------------------------#
 f.create_transition_reward_matrix_costs <- function(df.params){# User defined
   ### Arguments:  
   #     df.params: dataframe with the model parameters 
   ### Returns
-  #     m.P: the transition probability matrix 
+  #     m.R: the reward matrix 
   with(as.list(df.params), {
     
-    #### Create age-specific transition matrices ####
     # Initialize matrix
     m.R <- matrix(NA, 
                   nrow = n.states, ncol = n.states, 
@@ -63,14 +66,16 @@ f.create_transition_reward_matrix_costs <- function(df.params){# User defined
   )
 }
 
+#------------------------------------------------------#
+#### Generate the reward matrix for effects         ####
+#------------------------------------------------------#
 f.create_transition_reward_matrix_effects <- function(df.params){ # User defined
   ### Arguments:  
   #     v.params: vector of model parameters 
   ### Returns
-  #     m.P: the transition probability matrix 
+  #     m.R: the reward matrix 
   with(as.list(df.params), {
     
-    #### Create age-specific transition matrices ####
     # Initialize matrix
     m.R <- matrix(NA, 
                   nrow = n.states, ncol = n.states, 

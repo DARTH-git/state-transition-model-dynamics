@@ -1,0 +1,3 @@
+"0","#### 05.1 Create reward matrices for both costs and effects #### "
+"0","m.R_costs   <- f.create_transition_reward_matrix_costs(df.params = df.params.init)"
+"0","m.R_effects <- f.create_transition_reward_matrix_effects(df.params = df.params.init)"
