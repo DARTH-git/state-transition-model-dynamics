@@ -1,0 +1,6 @@
+"0","# Iterative solution of time-dependent cSTM"
+"0","for(t in 1:n.t){"
+"0","  m.MTimDep[t + 1, ] <- m.MTimDep[t, ] %*% a.P[, , t]"
+"0","}"
+"2","Error in n.t : object 'n.t' not found
+"

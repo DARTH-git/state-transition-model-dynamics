@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1554899422747.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2569045385",
+    "id" : "C60FE1D8",
+    "lastKnownWriteTime" : 1554900520,
+    "last_content_update" : 1554900520808,
+    "path" : "~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamics/Generic 3-state example/markdown/State-transition model dynamics-generic case study.Rmd",
+    "project_path" : "Generic 3-state example/markdown/State-transition model dynamics-generic case study.Rmd",
+    "properties" : {
+        "cursorPosition" : "138,722",
+        "docOutlineSize" : "172",
+        "docOutlineVisible" : "1",
+        "last_setup_crc32" : "F2A7DA33bb338d19",
+        "scrollLine" : "137"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
