@@ -1,4 +1,0 @@
-"0","# For some reason I can't manage reading these files so I copied it to the markdown for now but we need to see how we can source the files. 
-setwd(""~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH framework/Decision-Modeling-Framework"")
-"
-"2","The working directory was changed to /Users/elinekrijkamp/Dropbox (Persoonlijk)/03_Onderzoek/DARTH framework/Decision-Modeling-Framework inside a notebook chunk. The working directory will be reset when the chunk is finished running. Use the knitr root.dir option in the setup chunk to change the working directory for notebook chunks."

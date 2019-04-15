@@ -1,4 +1,0 @@
-"0","knitr::opts_chunk$set(echo = TRUE)"
-"0","knitr::opts_knit$set(root.dir = '~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH framework/Decision-Modeling-Framework')"
-"0","#doc.type <- knitr::opts_knit$get('rmarkdown.pandoc.to')"
-"0","#opts_chunk$set(echo = FALSE, cache=FALSE)"

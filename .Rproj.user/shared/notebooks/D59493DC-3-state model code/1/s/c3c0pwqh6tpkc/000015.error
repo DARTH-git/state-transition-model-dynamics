@@ -1,1 +1,0 @@
-{"frames":[{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"ggplot(melt(m.MViaA), aes(x = Var1, y = value, color = Var2))","line_number":0},{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"melt(m.MViaA)","line_number":0}],"message":"Error in melt(m.MViaA) : object 'm.MViaA' not found\n"}
