@@ -1,4 +1,0 @@
-"0","for(t in 1:n.t){  # loop through the number of cycles"
-"0","  # estimate the state vector for the next cycle (t + 1)"
-"0","  m.M[t + 1, ] <- m.M[t, ] %*% m.P   # Equation 3   "
-"0","}"

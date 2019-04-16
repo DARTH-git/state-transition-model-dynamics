@@ -1,3 +1,0 @@
-"0","a.A <- array(0, dim = c(n.states, n.states, n.t + 1),"
-"0","             dimnames = list(v.n, v.n, 0:n.t)) # initialize array"
-"0","diag(a.A[, , 1]) <- s0 # store the initial state vector in the diagonal of A"
