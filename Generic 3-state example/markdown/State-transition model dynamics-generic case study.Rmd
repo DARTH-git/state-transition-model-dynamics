@@ -1,5 +1,5 @@
 ---
-subtitle: "An alternative representation of state-transition model dynamics - Generic case study using a 3-state model"
+subtitle: "An alternative representation of state-transition model dynamics using multidimensional arrays- Generic case study using a 3-state model"
 title: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ. An alternative representation of state-transition model dynamics'.
 date: "`r Sys.Date()`"
 output:
@@ -67,8 +67,8 @@ We start by loading the packages and functions needed.
 library(dplyr)    # to manipulate data
 library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
-library(scales)   # for dollar signs and commas
-library(tensorA)  # for tensor calculations 
+#library(scales)   # for dollar signs and commas
+#library(tensorA)  # for tensor calculations 
 ```
 
 #### 01.2 External parameters
@@ -298,6 +298,7 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
   xlab("Cycle") +
   ylab("Proportion of the cohort") +
+  ggtitle("Cohort trace of the simple 3-state model")+
   theme_bw(base_size = 16) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
   theme()
