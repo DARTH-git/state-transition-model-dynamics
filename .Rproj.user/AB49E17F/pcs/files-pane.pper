@@ -2,12 +2,12 @@
     "path" : "~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamics/Generic 3-state example/markdown",
     "sortOrder" : [
         {
-            "ascending" : false,
-            "columnIndex" : 3
-        },
-        {
             "ascending" : true,
             "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 3
         }
     ]
 }

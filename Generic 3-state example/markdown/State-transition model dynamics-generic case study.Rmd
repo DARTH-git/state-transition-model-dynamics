@@ -38,14 +38,14 @@ In this simple 3-state model, we simulate a hypothetical cohort of 70-year-old i
 
 |           **Parameter**            |  **R name** |   **Value**   |
 |:-----------------------------------|:-----------:|:-------------:|
-| Time horizon ($n_t$)               | `n.t`       |  50 years     |
+| Time horizon ($n_t$)               | `n.t`       |  30 years     |
 | Names of health states ($n$)       | `v.n`       |  H, S, D      |
 | Annual transition probabilities    |             |               |
-| - Disease onset (H to S)           | `p.HS`      |  0.17         |
-| - Recovery (S to H)                | `p.SH`      |  0.35         |
+| - Disease onset (H to S)           | `p.HS`      |  0.30         |
+| - Recovery (S to H)                | `p.SH`      |  0.15         |
 | Annual mortality                   |             |               |
 | - All-cause (H to D)               | `p.HD`      |  0.05         |
-| - Disease specific (S to D)        | `p.SD`      |  0.10         |
+| - Disease specific (S to D)        | `p.SD`      |  0.20         |
 | Annual costs                       |             |               |
 | - Healthy individuals              | `c.H`       |  $1,000       |
 | - Sick individuals                 | `c.S`       |  $3,000       |
@@ -69,10 +69,6 @@ library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
 library(scales)   # for dollar signs and commas
 library(tensorA)  # for tensor calculations 
-
-#### 01.1.2 Load functions ####
-source("../functions/01_model-inputs_functions.R")
-source("../functions/02_simulation-model_functions.R")
 ```
 
 #### 01.2 External parameters
@@ -80,16 +76,32 @@ In this section, we specify the staring age of the cohort, the number of cycles,
 ```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
 #### 01.2.1 General setup ####
 age         <- 70  # age of starting cohort
-n.t         <- 50  # time horizon, number of cycles
+n.t         <- 30  # time horizon, number of cycles
 v.age.names <- age:(age + n.t - 1) # vector with age names
 v.n <- c("H", "S", "D") # vector with the 3 health states of the model:
 # Healthy (H), Sick (S), Dead (D)
 n.states <- length(v.n) # number of health states 
+```
 
+```{r}
 #### 01.2.3 Generate initial set of base-case external parameters ####
-df.params.init <- f.generate_init_params()
-## Create name of parameters
-df.names.params <- names(df.params.init)
+# Costs
+c.H   = 1000   # cost of remaining one cycle healthy 
+c.S   = 3000   # cost of remaining one cycle sick 
+c.D   = 0      # cost of being dead (per cycle)
+# State utilities
+u.H   = 1      # utility when healthy 
+u.S   = 0.60   # utility when sick 
+u.D   = 0      # utility when healthy 
+# Transition probabilities (per cycle)
+p.HS  = 0.30   # probability to become sick when healthy
+p.HD  = 0.05   # probability to die when healthy
+p.SH  = 0.15   # probability to become healthy when sick
+p.SD  = 0.20   # probability to die when healthy
+# Transition rewards
+du.HS  = 0.10  # one-time utility decrement when becoming sick
+ic.D   = 4000   # one-time cost of dying
+
 ```
 
 ### 02 Define and initialize matrices and vectors ####
@@ -99,7 +111,23 @@ In this section, we initialize the matrices and vectors used for storing the dat
 ```{r, message = FALSE, warning = FALSE}
 #### 02.1 Transition probability matrix ####
 # matrix m.P at the first cycle
-m.P <- f.create_transition_prob_matrix(df.params = df.params.init) 
+m.P <- matrix(NA, 
+                  nrow = n.states, ncol = n.states, 
+                  dimnames = list(v.n, v.n))
+
+# Fill in matrix
+# From Healthy
+m.P["H", "H"]  <- 1 - (p.HS + p.HD)
+m.P["H", "S"]  <- p.HS
+m.P["H", "D"]  <- p.HD
+# From Sick
+m.P["S", "H"]  <- p.SH
+m.P["S", "S"]  <- 1 - (p.SH + p.SD)
+m.P["S", "D"]  <- p.SD
+# From Death
+m.P["D", "H"]  <- 0
+m.P["D", "S"]  <- 0
+m.P["D", "D"]  <- 1
 
 #### 02.2 Initial state vector ####
 # the cohort start in the Healthy health state
@@ -187,8 +215,38 @@ We now showed how to run a state-transition cohort model using the dynamics arra
 
 ```{r, message = FALSE, warning = FALSE}
 #### 05.1 Create reward matrices for both costs and effects #### 
-m.R.costs   <- f.create_transition_reward_matrix_costs(df.params = df.params.init)
-m.R.effects <- f.create_transition_reward_matrix_effects(df.params = df.params.init)
+m.R.costs <- m.R.effects <- matrix(NA, 
+                  nrow = n.states, ncol = n.states, 
+                  dimnames = list(v.n, v.n))
+    
+# Fill in matrix for costs
+# From Healthy
+m.R.costs["H", "H"]  <- c.H
+m.R.costs["H", "S"]  <- c.H 
+m.R.costs["H", "D"]  <- c.H + ic.D
+# From Sick
+m.R.costs["S", "H"]  <- c.S
+m.R.costs["S", "S"]  <- c.S 
+m.R.costs["S", "D"]  <- c.S + ic.D
+# From Death
+m.R.costs["D", "H"]  <- c.D
+m.R.costs["D", "S"]  <- c.D
+m.R.costs["D", "D"]  <- c.D 
+
+# Fill in matrix for effects
+# From Healthy
+m.R.effects["H", "H"]  <- u.H
+m.R.effects["H", "S"]  <- u.H - du.HS 
+m.R.effects["H", "D"]  <- u.H 
+# From Sick
+m.R.effects["S", "H"]  <- u.S
+m.R.effects["S", "S"]  <- u.S 
+m.R.effects["S", "D"]  <- u.S + ic.D
+# From Death
+m.R.effects["D", "H"]  <- u.D
+m.R.effects["D", "S"]  <- u.D
+m.R.effects["D", "D"]  <- u.D 
+
 ```
 
 #### Equation 11  
