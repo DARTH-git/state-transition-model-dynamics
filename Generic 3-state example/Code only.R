@@ -2,7 +2,6 @@
 ## Simple 3-state model showing the array approach ## 
 rm(list = ls())  # remove any variables in R's memory 
 # Load the packages
-library(dplyr)    # to manipulate data
 library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
 
@@ -93,7 +92,7 @@ m.R.effects["D", "S"]  <- u.D
 m.R.effects["D", "D"]  <- u.D 
 
 #### Expected QALYs and Costs per cycle for each strategy ####
-a.O.costs <- a.O.effects <- array(0, dim = c(n.states, n.states, n.t + 1), dimnames = list(v.n, v.n, 0:n.t))
+a.Y.costs <- a.Y.effects <- array(0, dim = c(n.states, n.states, n.t + 1), dimnames = list(v.n, v.n, 0:n.t))
 
 ### Run the model 
 for(t in 1:n.t){  # loop through the number of cycles
@@ -102,13 +101,13 @@ for(t in 1:n.t){  # loop through the number of cycles
   a.A[, , t + 1] <- diag(m.M[t, ]) %*% m.P  # fill array A for t + 1 
   
   # element-wise-multiplication of array A with the rewards matrices
-  a.O.costs[, , t]   <- a.A[, , t] * m.R.costs   
-  a.O.effects[, , t] <- a.A[, , t] * m.R.effects 
+  a.Y.costs[, , t]   <- a.A[, , t] * m.R.costs   
+  a.Y.effects[, , t] <- a.A[, , t] * m.R.effects 
 }
 
 # Perform a cost effectiveness analysis 
-v.costs <- rowSums(t(colSums(a.O.costs)))    # calculate the expected costs per cycle
-v.QALYs <- rowSums(t(colSums(a.O.effects)))  # calculate the expected QALYs per cycle
+v.costs <- rowSums(t(colSums(a.Y.costs)))    # calculate the expected costs per cycle
+v.QALYs <- rowSums(t(colSums(a.Y.effects)))  # calculate the expected QALYs per cycle
 TC <- sum(v.costs)                           # calculate the total expected costs
 TE <- sum(v.QALYs)                           # calculate the total expected QALYS
 v.results <- c(TC, TE)                       # combine the total expected costs and QALYs
@@ -125,3 +124,4 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
   theme_bw(base_size = 16) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
   theme()
+

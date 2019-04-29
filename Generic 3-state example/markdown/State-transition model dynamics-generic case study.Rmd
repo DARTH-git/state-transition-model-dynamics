@@ -64,11 +64,11 @@ In this simple 3-state model, we simulate a hypothetical cohort of 70-year-old i
 We start by loading the packages and functions needed. 
 ```{r, eval = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
 #### 01.1 Load packages and functions ####
-library(dplyr)    # to manipulate data
 library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
 #library(scales)   # for dollar signs and commas
 #library(tensorA)  # for tensor calculations 
+#library(dplyr)    # to manipulate data
 ```
 
 #### 01.2 External parameters
@@ -258,16 +258,16 @@ m.R.effects  # show the reward matrix for effects
 ```
 
 #### Equation 12 
-In this section we create outcome arrays, `a.O`, one for costs, called `a.O_costs`, and one for effects, called `a.O_effects`. These arrays show the costs and QALYs generated with each transition at each cycle. By iteratively element-wise multiplication of the reward matrices, `m.R_costs` and `m.R_effects`, with array `a.A` we can fill the outcome arrays.
+In this section we create outcome arrays, `a.Y`, one for costs, called `a.Y_costs`, and one for effects, called `a.Y_effects`. These arrays show the costs and QALYs generated with each transition at each cycle. By iteratively element-wise multiplication of the reward matrices, `m.R_costs` and `m.R_effects`, with array `a.A` we can fill the outcome arrays.
 ```{r, message = FALSE, warning = FALSE}
 #### 05.2 Expected QALYs and Costs per cycle for each strategy ####
-a.O.costs <- a.O.effects <- array(0, dim = c(n.states, n.states, n.t + 1),
+a.Y.costs <- a.Y.effects <- array(0, dim = c(n.states, n.states, n.t + 1),
              dimnames = list(v.n, v.n, 0:n.t))
 
 for(t in 1:n.t){ 
 # element-wise-multiplication of array A with the rewards matrices
-a.O.costs[, , t]   <- a.A[, , t] * m.R.costs   
-a.O.effects[, , t] <- a.A[, , t] * m.R.effects 
+a.Y.costs[, , t]   <- a.A[, , t] * m.R.costs   
+a.Y.effects[, , t] <- a.A[, , t] * m.R.effects 
 }
 ```
 
@@ -277,9 +277,9 @@ Please note that we are now showing all these steps in a step-wise approach, res
 The final step is to calculate the total costs and QALYs. We first calculate the expected cost and QALYs per cycle and store them in the vectors `v.Costs` and `v.QALYs`. Then, we sum the values within each vector to compute the total expected cost (`TC`) and QALYs (`TE`). 
 ```{r, message = FALSE, warning = FALSE}
 # calculate the expected costs per cycle
-v.costs <- rowSums(t(colSums(a.O.costs))) 
+v.costs <- rowSums(t(colSums(a.Y.costs))) 
 # calculate the expected QALYs per cycle
-v.QALYs <- rowSums(t(colSums(a.O.effects))) 
+v.QALYs <- rowSums(t(colSums(a.Y.effects))) 
 
 TC <- sum(v.costs)  # calculate the total expected costs
 TE <- sum(v.QALYs)  # calculate the total expected QALYS

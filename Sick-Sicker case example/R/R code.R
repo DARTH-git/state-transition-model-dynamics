@@ -21,7 +21,6 @@ rm(list = ls())  # remove any variables in R's memory
 
 ###01 Initial setup 
 #### 01.1 Load packages and functions ####
-library(dplyr) # For data manipulation
 library(dplyr)    # to manipulate data
 library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
@@ -29,8 +28,8 @@ library(scales)   # for dollar signs and commas
 library(tensorA)  # for tensor calculations 
 
 #### 01.1.2 Load functions ####
-source("functions/01_model-inputs_functions.R")
-source("functions/02_simulation-model_functions.R")
+source("Sick-Sicker case example/functions/01_model-inputs_functions.R")
+source("Sick-Sicker case example/functions/02_simulation-model_functions.R")
 
 #### 01.2 External parameters ####
 #### 01.2.1 General setup ####
@@ -47,7 +46,7 @@ v.dwe <- 1 / ((1 + d.c) ^ (0:(n.t))) # vector with discount weights for QALYs
 v.s.init <- c(H = 1, S1 = 0, S2 = 0, D = 0) # initial state vector
 
 #### 01.2.2 All-cause age-, sex- and race- (ASR) specific mortality ####
-df.r.asr <- read.csv("data/01_all-cause-mortality-USA-2015.csv")
+df.r.asr <- read.csv("Sick-Sicker case example/data/01_all-cause-mortality-USA-2015.csv")
 v.r.asr  <- df.r.asr %>%
   dplyr::select(Total) %>%
   as.matrix()              # vector with mortality rates
@@ -121,12 +120,12 @@ m.R_effects
 
 #### 05.2 Expected QALYs and Costs per cycle for each strategy ####
 #### Equation 9 ####
-a.O_costs <- a.O_effects <- array(0, dim = c(n.states, n.states, n.t + 1),
+a.Y_costs <- a.Y_effects <- array(0, dim = c(n.states, n.states, n.t + 1),
              dimnames = list(v.n, v.n, 0:n.t))
 
 for(t in 1:n.t){ 
-a.O_costs[, , t]   <- a.A[, , t] * m.R_costs
-a.O_effects[, , t] <- a.A[, , t] * m.R_effects
+a.Y_costs[, , t]   <- a.A[, , t] * m.R_costs
+a.Y_effects[, , t] <- a.A[, , t] * m.R_effects
 }
 
 ## Vector of expected costs per cycle
@@ -135,8 +134,8 @@ a.O_effects[, , t] <- a.A[, , t] * m.R_effects
 #v.qaly_UC  <- rowSums(t(colSums(to.tensor(a.A) * to.tensor(m.R_effect))))
 
 #### Equation 10 ####
-v.Costs <- rowSums(t(colSums(a.O_costs)))
-v.QALYs <- rowSums(t(colSums(a.O_effects)))
+v.Costs <- rowSums(t(colSums(a.Y_costs)))
+v.QALYs <- rowSums(t(colSums(a.Y_effects)))
 
 TC <- t(v.Costs) %*% v.dwc
 TE <- t(v.QALYs) %*% v.dwe

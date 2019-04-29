@@ -43,7 +43,6 @@ In the Sick-Sicker model, we simulate a hypothetical cohort of 25-year-old indiv
 We start with loading the packages and functions needed. 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 #### 01.1 Load packages and functions ####
-library(dplyr) # For data manipulation
 library(dplyr)    # to manipulate data
 library(reshape2) # to transform data
 library(ggplot2)  # for nice looking plots
@@ -241,16 +240,16 @@ m.R_effects  # show the reward matrix for effects
 ```
 
 #### Equation 12 
-In this section we create outcome array `a.O`, one for costs `a.O_costs` and one for effects `a.O_effects`. These arrays show the costs and QALYs generated with each transition at each cycle. By iteratively element-wise multiplication of the reward matrices with `a.A` we can fill the outcome arrays.  Again, we are now showing all these steps in a step wise approach, resulting in having a couple of loops for time. This can all be combined in one iterative process. 
+In this section we create outcome array `a.Y`, one for costs `a.Y_costs` and one for effects `a.Y_effects`. These arrays show the costs and QALYs generated with each transition at each cycle. By iteratively element-wise multiplication of the reward matrices with `a.A` we can fill the outcome arrays.  Again, we are now showing all these steps in a step wise approach, resulting in having a couple of loops for time. This can all be combined in one iterative process. 
 ```{r, message = FALSE, warning = FALSE}
 #### 05.2 Expected QALYs and Costs per cycle for each strategy ####
-a.O_costs <- a.O_effects <- array(0, dim = c(n.states, n.states, n.t + 1),
+a.Y_costs <- a.Y_effects <- array(0, dim = c(n.states, n.states, n.t + 1),
              dimnames = list(v.n, v.n, 0:n.t))
 
 for(t in 1:n.t){ 
 # element-wise-multiplication of array A with the rewards matrices
-a.O_costs[, , t]   <- a.A[, , t] * m.R_costs   
-a.O_effects[, , t] <- a.A[, , t] * m.R_effects 
+a.Y_costs[, , t]   <- a.A[, , t] * m.R_costs   
+a.Y_effects[, , t] <- a.A[, , t] * m.R_effects 
 }
 ```
 
@@ -265,9 +264,9 @@ a.O_effects[, , t] <- a.A[, , t] * m.R_effects
 The final step is to calculated to the total expected discounted costs and QALYs. We start by calculating the expected cost and QALYs per cycle. These values, stored in the vectors `v.Costs` and `v.QALYs`, in turn are multiplied with the vector of discount weights, `v.dwc`1 and `v.dwe`, respectively. This gives us the total expected discounted cost (`TC`) and QALYs (`TE`. 
 ```{r, message = FALSE, warning = FALSE}
 # calculate the expected costs per cycle
-v.Costs <- rowSums(t(colSums(a.O_costs))) 
+v.Costs <- rowSums(t(colSums(a.Y_costs))) 
 # calculate the expected QALYs per cycle
-v.QALYs <- rowSums(t(colSums(a.O_effects))) 
+v.QALYs <- rowSums(t(colSums(a.Y_effects))) 
 
 TC <- t(v.Costs) %*% v.dwc   # calculate the total expected discounted costs
 TE <- t(v.QALYs) %*% v.dwe   # calculate the total expected discounted QALYS
