@@ -1,3 +1,11 @@
+# This code is used to prove the cumulative incidence calculations based on the 
+# array structure by running a simple 3-state model:
+# (Healthy (H), Sick (S), Dead(D))
+# with an additional health state for those that have always been healthy (H) and 
+# one for those that have been sick at least once before (H2)
+# The cumulative incidence is the:
+# sum of the cohort that transitioned from H -> S / total individuals in H at t=0
+
 
 ## Simple 3-state model showing the array approach ## 
 rm(list = ls())  # remove any variables in R's memory 
@@ -107,20 +115,5 @@ write.csv(a.A["H2", "S", ],  file = "Array_A_H2_S_4states.R", row.names = TRUE)
 
 
 
-
-v.CI_4state <- CI_4state <- numeric(n.t)
-for (k in 1:n.t){
-v.CI_4state <- a.A["H", "S", ] # cumulative incidence 
-CI_4state[k] <- sum(v.CI_4state[1:k])
-}
-
-
-
-
-for (t in 1:n.t){
-  p.atRisk <- 
-    v.ID_sick1[t] <- (a.A["H","S", t] * p.atRisk) / (sum(a.A["H","H", t]) - sum(a.A["S","H", 1:t]))
-  v.CI[t+1] <- v.CI[t] +  v.ID_sick1[t]
-}           
 
 
