@@ -99,19 +99,12 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
 # those at risk of becomming a new case are those that stay in the H state
 # this information if valuable and therefore stored in a .csv file to compare with the results of the 3-state model.
 
-
-write.csv(m.M, file = "Cohort_trace_4states.R", row.names = TRUE)
-write.csv(a.A["H", "S", ],  file = "Array_A_H_S_4states.R", row.names = TRUE)
-write.csv(a.A["H2", "S", ],  file = "Array_A_H2_S_4states.R", row.names = TRUE)
-
-
-
-
-
-
-
-
-
+m.M_4states <- m.M # store the values in a different object name 
+a.A_4states <- a.A # store the values in a different object name 
+  
+# Save the objects
+save(m.M_4states, file = "Cohort_trace_4states.RData") # save the object
+save(a.A_4states, file = "Array_4states.RData") # save the object 
 
 
 

@@ -127,71 +127,25 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
 
 ################################################################################
 ### Cumulative incidence 
+p.HH <- p.HS <- numeric(n.t)
+n.atRisk <- n.newCases <- v.CI<- numeric(n.t+1)
 
-# Load the data from the 3-state model with the 4th temporary state 
-m.M_4states  <- read.csv("Cohort_trace_4states.R", head = TRUE) 
-m.M_4states <- m.M_4states [-1] # minus a index column
-
-a.A_4states_HS  <- read.csv("Array_A_H_S_4states.R", head = TRUE)
-a.A_4states_HS  <- a.A_4states_HS$x # select the values H->S
-
-a.A_4states_H2S   <- read.csv("Array_A_H2_S_4states.R", head = TRUE)
-a.A_4states_H2S   <- a.A_4states_H2S$x # select the value H2 -> S
-
-# Check if the 3-state model with 4 healht states gives the same results
-round(m.M[,"H"], 14) == round(m.M_4states$H + m.M_4states$H2, 14)
-round(m.M[,"S"], 14) == round(m.M_4states$S, 14)
-round(m.M[,"D"], 12) == round(m.M_4states$D, 12)
-# Conclusion: YES, with 15 and 12 decimals it is identical.
+n.atRisk[1]   <- a.A["H", "H", 1] # at risk at cycle 0 
+n.newCases[1] <- a.A["H", "S", 1] # at new cases at cycle 0 
 
 
-p.HS <- n.newCases2 <- v.CI <- n.atRisk <- p.atRisk <- n.newCases <- numeric(n.t) # initiate some vectors to store information for all time points t
-n.atRisk[1] <- m.M[1, "H"] # all individuals that stated in the healthy state are at risk at cycle 0
-p.atRisk[1] <- m.M[1, "H"] / sum(m.M[1, ]) # proportion of the cohort that is at risk of getting sick for the first time at cycle 0
+for(t in 1:n.t){
+p.HH[t] <- a.A["H", "H", t + 1] / sum(a.A["H", , t + 1])  # get the p.HH from array A for each cycle
+p.HS[t] <- a.A["H", "S", t + 1] / sum(a.A["H", , t + 1])  # get the transition probability at each time point from array A. Those that getting sick / total started healthy
 
-n.newCases[1] <- 0
-
-for (k in 1:(n.t + 1)){ # for cycle 0 to the last cycle
-  n.atRisk[k] <- m.M[1, "H"] * (m.P["H", "H"]^(k - 1)) # proportion of the cohort at risk of getting sick for the first time # k - 1 : the first cycle they are all at risk
-  p.HS[k - 1] <- a.A["H", "S", k] / sum(a.A["H", , k]) # get the transition probability at each time point from array A. Those that getting sick / total started healthy
-
-  n.newCases[k + 1] <- n.atRisk[k] * p.HS[k]  # new cases using the transition probability 
-  v.CI[k] <- sum(n.newCases[1:k])  / m.M[1, "H"] # calculate the cumulative incidence 
-  ####################### Try using a proportion calculation) ##########################
-  p.atRisk[k+1] <- n.atRisk[k] / m.M[k, "H"] # proportion of the cohort that is at risk of becomming sick for the first time from those that are healthy
-  n.newCases2[k] <- a.A["H", "S", k] * p.atRisk[k]  #p.atRisk[k] # new of each time point
+#n.atRisk[t + 1] <-  a.A["H", "H", 1] * prod(p.HH[1:t]) # get number at risk (e.g. always healthy individuals)
+n.atRisk[t + 1]   <- n.atRisk[t] * p.HH[t]
+n.newCases[t + 1] <- n.atRisk[t] * p.HS[t]  # new cases using the transition probability 
 }
 
-
-
-
-
-# step 1: check if the calcualtion of the number at risk is correct 
-round(n.atRisk, 3) # check the values 
-round(m.M_4states$H, 3) # check the values 
-round(n.atRisk, 15) == round(m.M_4states$H, 15) # they are equal up to 15 decimals
-# Conclusion: calculation of the number at risk is correct.
-
-# step 2: check if the number of healthy individuals is correct 
-round(m.M[, "H"], 14) == round(m.M_4states$H +  m.M_4states$H2, 14) 
-# Conclusion: calculation of those that are healthy is correct up to 14 decimals
-
-# step 3: check if the ratio of at risk/healthy is correct 
-p.atRisk_4states <- m.M_4states$H / (m.M_4states$H +  m.M_4states$H2)
-round(p.atRisk, 14) == round(p.atRisk_4states, 14) 
-# Conclusion : they are correct, but not with 15 decimals anymore, but with 14
-# This is still good enough.
-
-# step 4: check if the total number of individuals that transition to sick is correct
-round(a.A["H", "S", ], 15)  == round(a.A_4states_HS + a.A_4states_H2S, 15)
-# total number of individuals that move from health to sick 
-
-round(v.CI, 10) == round(cumsum(a.A_4states_HS), 10)
-plot(v.CI)
-paste0()
-
-df.CI <- as.data.frame(cbind(0:n.t, v.CI))
-colnames(df.CI) <- c("cycle", "CI")
+v.CI <- cumsum(n.newCases) / a.A["H", "H", 1] # calculate the cumulative incidence 
+df.CI <- as.data.frame(cbind(0:n.t, v.CI)) # create a dataframe with cycles and cumulative incidence
+colnames(df.CI) <- c("cycle", "CI") # name the columns of the dataframe
 
 
 ### Plot cohort trace
@@ -202,10 +156,14 @@ ggplot(df.CI, aes(x = cycle, y = CI)) +
   ylab("Cumulative incidence") +
   ggtitle("Cumulative incidence of getting sick for the first time")+
   theme_bw(base_size = 16) +
-  scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) 
+  scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
+  scale_y_continuous(name = "Cumulative incidence", limits = c(0, 1)) +
   theme()
-ggsave("figs/CumIncPlot.png", width = 8, height = 6) # save the plot 
-  
+ggsave("figs/CumulativeIncidence.png", width = 8, height = 6) # save the plot 
   
 
+# Save the objects
+save(m.M, file = "Cohort_trace.RData") # save the object
+save(a.A, file = "Array.RData") # save the object 
+save(v.CI, file = "CumulativeIncidence.RData") # save the object 
   
