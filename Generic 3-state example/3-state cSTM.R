@@ -84,7 +84,7 @@ m.R.effects["H", "D"]  <- u.H
 # From Sick
 m.R.effects["S", "H"]  <- u.S
 m.R.effects["S", "S"]  <- u.S 
-m.R.effects["S", "D"]  <- u.S + ic.D
+m.R.effects["S", "D"]  <- u.S 
 # From Death
 m.R.effects["D", "H"]  <- u.D
 m.R.effects["D", "S"]  <- u.D
