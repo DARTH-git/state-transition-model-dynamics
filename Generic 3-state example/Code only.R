@@ -154,16 +154,18 @@ ggplot(df.CI, aes(x = cycle, y = CI)) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
   xlab("Cycle") +
   ylab("Cumulative incidence") +
-  ggtitle("Cumulative incidence of getting sick for the first time")+
+  ggtitle("Cumulative incidence of getting sick for the first time") +
   theme_bw(base_size = 16) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
   scale_y_continuous(name = "Cumulative incidence", limits = c(0, 1)) +
   theme()
+
 ggsave("figs/CumulativeIncidence.png", width = 8, height = 6) # save the plot 
-  
 
 # Save the objects
-save(m.M, file = "Cohort_trace.RData") # save the object
-save(a.A, file = "Array.RData") # save the object 
-save(v.CI, file = "CumulativeIncidence.RData") # save the object 
+save(m.M,        file = "output/Cohort_trace.RData") # save the object
+save(a.A,        file = "output/Array.RData") # save the object 
+save(n.atRisk,   file = "output/n.atRisk.RData") # save the object 
+save(n.newCases, file = "output/n.newCases.RData") # save the object 
+save(v.CI,       file = "output/CumulativeIncidence.RData") # save the object 
   

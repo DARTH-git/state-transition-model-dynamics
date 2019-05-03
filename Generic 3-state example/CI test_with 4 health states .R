@@ -103,8 +103,8 @@ m.M_4states <- m.M # store the values in a different object name
 a.A_4states <- a.A # store the values in a different object name 
   
 # Save the objects
-save(m.M_4states, file = "Cohort_trace_4states.RData") # save the object
-save(a.A_4states, file = "Array_4states.RData") # save the object 
+save(m.M_4states, file = "output/Cohort_trace_4states.RData") # save the object
+save(a.A_4states, file = "output/Array_4states.RData") # save the object 
 
 
 
