@@ -1,4 +1,3 @@
-
 ## Simple 3-state model showing the array approach ## 
 rm(list = ls())  # remove any variables in R's memory 
 # Load the packages
@@ -52,7 +51,7 @@ m.P["D", "D"]  <- 1
 #### Initial state vector ####
 v.m0 <- c(H = 1, S = 0, D = 0) # initiate the vector
 
-## Create the Markov cohort trace matrix m.M that capturs the proportion of the cohort in each state at each cycle
+## Create the Markov cohort trace matrix m.M that captures the proportion of the cohort in each state at each cycle
 m.M <- matrix(0, nrow = (n.t + 1), ncol = n.states, dimnames = list(0:n.t, v.n)) # initialize cohort trace matrix 
 m.M[1, ] <- v.m0   # store the initial state vector
 
@@ -127,28 +126,25 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
 
 ################################################################################
 ### Cumulative incidence 
-p.HH <- p.HS <- numeric(n.t)
-n.atRisk <- n.newCases <- v.CI<- numeric(n.t+1)
+p.HH <- p.HS <- numeric(n.t) # initiate vectors
+n.atRisk <- n.newCases <- v.CI<- numeric(n.t + 1) # initiate vectors 
 
-n.atRisk[1]   <- a.A["H", "H", 1] # at risk at cycle 0 
-n.newCases[1] <- a.A["H", "S", 1] # at new cases at cycle 0 
+n.atRisk[1]   <- a.A["H", "H", 1] # number at risk at cycle 0 
+n.newCases[1] <- a.A["H", "S", 1] # number of new cases at cycle 0 
 
-
-for(t in 1:n.t){
+for(t in 1:n.t){ # start a loop 
 p.HH[t] <- a.A["H", "H", t + 1] / sum(a.A["H", , t + 1])  # get the p.HH from array A for each cycle
 p.HS[t] <- a.A["H", "S", t + 1] / sum(a.A["H", , t + 1])  # get the transition probability at each time point from array A. Those that getting sick / total started healthy
-
-#n.atRisk[t + 1] <-  a.A["H", "H", 1] * prod(p.HH[1:t]) # get number at risk (e.g. always healthy individuals)
-n.atRisk[t + 1]   <- n.atRisk[t] * p.HH[t]
+n.atRisk[t + 1]   <- n.atRisk[t] * p.HH[t] # number at risk at time t + 1
 n.newCases[t + 1] <- n.atRisk[t] * p.HS[t]  # new cases using the transition probability 
-}
+} 
 
 v.CI <- cumsum(n.newCases) / a.A["H", "H", 1] # calculate the cumulative incidence 
 df.CI <- as.data.frame(cbind(0:n.t, v.CI)) # create a dataframe with cycles and cumulative incidence
 colnames(df.CI) <- c("cycle", "CI") # name the columns of the dataframe
 
 
-### Plot cohort trace
+### Plot the cumulative incidence
 ggplot(df.CI, aes(x = cycle, y = CI)) +
   geom_line(size = 1.3) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
@@ -162,7 +158,7 @@ ggplot(df.CI, aes(x = cycle, y = CI)) +
 
 ggsave("figs/CumulativeIncidence.png", width = 8, height = 6) # save the plot 
 
-# Save the objects
+# Save important objects
 save(m.M,        file = "output/Cohort_trace.RData") # save the object
 save(a.A,        file = "output/Array.RData") # save the object 
 save(n.atRisk,   file = "output/n.atRisk.RData") # save the object 
