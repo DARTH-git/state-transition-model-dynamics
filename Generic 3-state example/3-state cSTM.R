@@ -130,7 +130,7 @@ v.e <- numeric(n.t)
 v.e[1] <- a.A["H", "D", 1] + a.A["H", "D", 1]
 
 for(t in 1:n.t){
-  v.e[t + 1] <-  (a.A["H", "D", t + 1] +  a.A["S", "D", t + 1]) / (m.M[t, "H"] + m.M[t, "S"] )
+  v.e[t + 1] <-  (a.A["S", "D", t + 1] ) / ( a.A["H", "D", t + 1] +  a.A["S", "D", t + 1] )
 }
 
 plot(v.e)
@@ -138,26 +138,24 @@ df.e <- as.data.frame(cbind(0:n.t, v.e)) # create a dataframe with cycles and pr
 colnames(df.e) <- c("cycle", "proportion") # name the columns of the dataframe
 
 
-### Plot the cumulative incidence
+### Plot ratio
 ggplot(df.e, aes(x = cycle, y = proportion)) +
   geom_line(size = 1.3) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
   xlab("Cycle") +
-  ylab("Proportion of those that die out of those alive") +
-  ggtitle("Proportion of those that die out of those alive") +
+  ylab("Ratio S->D vs to all deaths") +
+  ggtitle("Ratio deaths from sick to all deaths") +
   theme_bw(base_size = 16) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
-  scale_y_continuous(name = "Proportion that dies our of those alive", limits = c(0, 0.20)) +
+  scale_y_continuous(name = "Ratio S->D vs to all deaths", limits = c(0, 1)) +
   theme()
 
-ggsave("figs/Proportion that dies.png", width = 8, height = 6) # save the plot 
+ggsave("figs/Proportion_death_from_sick.png", width = 8, height = 6) # save the plot 
 
 
 
 # Save important objects
 save(m.M,        file = "output/Cohort_trace.RData") # save the object
 save(a.A,        file = "output/Array.RData") # save the object 
-save(n.atRisk,   file = "output/n.atRisk.RData") # save the object 
-save(n.newCases, file = "output/n.newCases.RData") # save the object 
-save(v.CI,       file = "output/CumulativeIncidence.RData") # save the object 
+
   
