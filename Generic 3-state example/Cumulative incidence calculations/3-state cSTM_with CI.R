@@ -125,34 +125,38 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
   theme()
 
 ################################################################################
-### Proportion of those that die out of those healthy and sick
-v.e <- numeric(n.t)
-v.e[1] <- a.A["H", "D", 1] + a.A["H", "D", 1]
+### Cumulative incidence 
+p.HH <- p.HS <- numeric(n.t) # initiate vectors
+n.atRisk <- n.newCases <- v.CI<- numeric(n.t + 1) # initiate vectors 
 
-for(t in 1:n.t){
-  v.e[t + 1] <-  (a.A["H", "D", t + 1] +  a.A["S", "D", t + 1]) / (m.M[t, "H"] + m.M[t, "S"] )
-}
+n.atRisk[1]   <- a.A["H", "H", 1] # number at risk at cycle 0 
+n.newCases[1] <- a.A["H", "S", 1] # number of new cases at cycle 0 
 
-plot(v.e)
-df.e <- as.data.frame(cbind(0:n.t, v.e)) # create a dataframe with cycles and proportion that dies each cycle
-colnames(df.e) <- c("cycle", "proportion") # name the columns of the dataframe
+for(t in 1:n.t){ # start a loop 
+p.HH[t] <- a.A["H", "H", t + 1] / sum(a.A["H", , t + 1])  # get the p.HH from array A for each cycle
+p.HS[t] <- a.A["H", "S", t + 1] / sum(a.A["H", , t + 1])  # get the transition probability at each time point from array A. Those that getting sick / total started healthy
+n.atRisk[t + 1]   <- n.atRisk[t] * p.HH[t] # number at risk at time t + 1
+n.newCases[t + 1] <- n.atRisk[t] * p.HS[t]  # new cases using the transition probability 
+} 
+
+v.CI <- cumsum(n.newCases) / a.A["H", "H", 1] # calculate the cumulative incidence 
+df.CI <- as.data.frame(cbind(0:n.t, v.CI)) # create a dataframe with cycles and cumulative incidence
+colnames(df.CI) <- c("cycle", "CI") # name the columns of the dataframe
 
 
 ### Plot the cumulative incidence
-ggplot(df.e, aes(x = cycle, y = proportion)) +
+ggplot(df.CI, aes(x = cycle, y = CI)) +
   geom_line(size = 1.3) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
   xlab("Cycle") +
-  ylab("Proportion of those that die out of those alive") +
-  ggtitle("Proportion of those that die out of those alive") +
+  ylab("Cumulative incidence") +
+  ggtitle("Cumulative incidence of getting sick for the first time") +
   theme_bw(base_size = 16) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
-  scale_y_continuous(name = "Proportion that dies our of those alive", limits = c(0, 0.20)) +
+  scale_y_continuous(name = "Cumulative incidence", limits = c(0, 1)) +
   theme()
 
-ggsave("figs/Proportion that dies.png", width = 8, height = 6) # save the plot 
-
-
+ggsave("figs/CumulativeIncidence.png", width = 8, height = 6) # save the plot 
 
 # Save important objects
 save(m.M,        file = "output/Cohort_trace.RData") # save the object
