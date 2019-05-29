@@ -113,16 +113,6 @@ v.results <- c(TC, TE)                       # combine the total expected costs 
 names(v.results) <- c("Costs", "Effect")     # name the vector
 v.results                                    # print the results  
 
-### Plot cohort trace
-ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
-  geom_line(size = 1.3) +
-  scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
-  xlab("Cycle") +
-  ylab("Proportion of the cohort") +
-  ggtitle("Cohort trace of the simple 3-state model")+
-  theme_bw(base_size = 16) +
-  scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
-  theme()
 
 ################################################################################
 ### Proportion of those that die out of those healthy and sick
@@ -151,7 +141,6 @@ ggplot(df.e, aes(x = cycle, y = proportion)) +
   theme()
 
 ggsave("figs/Proportion_death_from_sick.png", width = 8, height = 6) # save the plot 
-
 
 
 # Save important objects
