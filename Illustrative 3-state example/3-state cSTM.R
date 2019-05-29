@@ -1,4 +1,4 @@
-## Simple generic 3-state model showing the array approach ## 
+## Illustrative stylistic 3-state model showing the array approach ## 
 rm(list = ls())  # remove any variables in R's memory 
 # Load the packages
 library(reshape2) # to transform data
