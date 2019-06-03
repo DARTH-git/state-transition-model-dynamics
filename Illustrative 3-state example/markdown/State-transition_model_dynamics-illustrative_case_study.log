@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.10.1)  29 MAY 2019 12:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.10.1)  3 JUN 2019 16:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -663,47 +663,47 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 152.
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 151.
 
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<../figs/STM diagram.png, id=33, 269.808pt x 263.5446pt>
+<../figs/STM diagram.png, id=37, 269.808pt x 263.5446pt>
 File: ../figs/STM diagram.png Graphic file (type png)
 <use ../figs/STM diagram.png>
-Package pdftex.def Info: ../figs/STM diagram.png  used on input line 158.
+Package pdftex.def Info: ../figs/STM diagram.png  used on input line 159.
 (pdftex.def)             Requested size: 269.81969pt x 263.556pt.
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 167.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 168.
 
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 167.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 168.
 
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 167
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 168
 .
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 167
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 168
 .
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 167.
+(Font)              <10> on input line 168.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 167.
+(Font)              <7> on input line 168.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 167.
-LaTeX Font Info:    Try loading font information for U+msa on input line 167.
+(Font)              <5> on input line 168.
+LaTeX Font Info:    Try loading font information for U+msa on input line 168.
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 167.
+LaTeX Font Info:    Try loading font information for U+msb on input line 168.
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
@@ -711,41 +711,55 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {/Users/elinekrijkamp/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.
 map}]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 198.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 199.
 [2 <../figs/STM diagram.png>] [3] [4] [5] [6] [7]
 <State-transition_model_dynamics-illustrative_case_study_files/figure-latex/coh
-ort-trace-1.pdf, id=89, 482.80376pt x 275.0275pt>
+ort-trace-1.pdf, id=92, 482.80376pt x 275.0275pt>
 File: State-transition_model_dynamics-illustrative_case_study_files/figure-late
 x/cohort-trace-1.pdf Graphic file (type pdf)
 <use State-transition_model_dynamics-illustrative_case_study_files/figure-latex
 /cohort-trace-1.pdf>
 Package pdftex.def Info: State-transition_model_dynamics-illustrative_case_stud
-y_files/figure-latex/cohort-trace-1.pdf  used on input line 655.
+y_files/figure-latex/cohort-trace-1.pdf  used on input line 666.
 (pdftex.def)             Requested size: 469.77039pt x 267.60307pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 673.
+<State-transition_model_dynamics-illustrative_case_study_files/figure-latex/dea
+d ratio-1.pdf, id=100, 491.8375pt x 275.0275pt>
+File: State-transition_model_dynamics-illustrative_case_study_files/figure-late
+x/dead ratio-1.pdf Graphic file (type pdf)
+<use State-transition_model_dynamics-illustrative_case_study_files/figure-latex
+/dead ratio-1.pdf>
+Package pdftex.def Info: State-transition_model_dynamics-illustrative_case_stud
+y_files/figure-latex/dead ratio-1.pdf  used on input line 718.
+(pdftex.def)             Requested size: 469.7721pt x 262.68889pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 [9 <./State-transition_model_dynamics-illustrative_case_study_files/figure-late
 x/cohort-trace-1.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 673.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 734.
+[10 <./State-transition_model_dynamics-illustrative_case_study_files/figure-lat
+ex/dead ratio-1.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 734.
 (./State-transition_model_dynamics-illustrative_case_study.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 673.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 673.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 734.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 734.
 Package rerunfilecheck Info: File `State-transition_model_dynamics-illustrative
 _case_study.out' has not changed.
-(rerunfilecheck)             Checksum: 2E4487A7EA6DD5CFD69510B4F3DA4569;1513.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 673.
+(rerunfilecheck)             Checksum: 5C1B6B51CFA80CEE4A0971FE6F663FA4;1785.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 734.
  ) 
 Here is how much of TeX's memory you used:
- 10829 strings out of 494585
- 155833 string characters out of 6174649
- 227455 words of memory out of 5000000
- 14293 multiletter control sequences out of 15000+600000
+ 10837 strings out of 494585
+ 156322 string characters out of 6174649
+ 227580 words of memory out of 5000000
+ 14299 multiletter control sequences out of 15000+600000
  36873 words of font info for 40 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 28i,6n,32p,388b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 28i,6n,32p,621b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
 }{/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.
 enc}</Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx
@@ -761,10 +775,10 @@ type1/public/lm/lmtk10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fon
 ts/type1/public/lm/lmtt10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/
 fonts/type1/public/lm/lmtti10.pfb>
 Output written on State-transition_model_dynamics-illustrative_case_study.pdf (
-9 pages, 288440 bytes).
+10 pages, 297902 bytes).
 PDF statistics:
- 156 PDF objects out of 1000 (max. 8388607)
- 127 compressed objects within 2 object streams
- 31 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 172 PDF objects out of 1000 (max. 8388607)
+ 139 compressed objects within 2 object streams
+ 33 named destinations out of 1000 (max. 500000)
+ 80 words of extra memory for PDF output out of 10000 (max. 10000000)
 

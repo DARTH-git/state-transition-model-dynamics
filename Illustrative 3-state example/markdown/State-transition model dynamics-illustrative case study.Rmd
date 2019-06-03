@@ -1,6 +1,6 @@
 ---
-title: "An multidimensional-array representation of state-transition dodel dynamics - Illustrative healthy-sick-dead 3-state model."
-subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ. An multidimensional-array representation of state-transition dodel dynamics - Illustrative healthy-sick-dead 3-state model.'
+title: "A multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model."
+subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ. An multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model.'
 date: "`r Sys.Date()`"
 output:
   pdf_document: default
@@ -31,9 +31,7 @@ rm(list = ls())  # remove any variables in R's memory
 ```
 
 ## Illustrative 3-state cohort model
-In this illustrative example, we follow a cohort of healthy 70-year-old individuals over their remaining lifetime, using 30 annual cycles. The healthy individuals can get sick or they can die. Sick individuals can fully recover, transitioning back to healthy, remain sick or die. The state-transition diagram is shown in Figure \ref{fig:STM}. Remaining in each of these health states is associated with some utilities and costs (the state rewards).  In addition to these state rewards, transition dis-utilities and costs apply. Getting sick is associated with a sudden decrease of quality of life of 0.1. In addition, transitioning to dead incurs a one-time cost of $4,000. Both the state and transition rewards are constant over time. All parameters of this model are fictitious, not based on a specific disease and described in the table below. We use some prefixed to name our variables and we try to use a <x>.<y>.<varName> structure as consistent as possible, with x being the data type prefix, e.g. `a.` for arrays, `m.` for matrix, `df.` for data frames etc. and y being the variable type prefix, e.g. `c.` for costs, `p.` for probabilities, `u.` for utilities etc. 
-
-
+In this illustrative example, we follow a cohort of healthy 70-year-old individuals over their remaining lifetime, using 30 annual cycles. The healthy individuals can get sick or they can die. Sick individuals can fully recover, transitioning back to healthy, remain sick or die. The state-transition diagram is shown in Figure \ref{fig:STM}. Remaining in each of these health states is associated with some utilities and costs (the state rewards).  In addition to these state rewards, transition dis-utilities and costs apply. Getting sick is associated with a sudden decrease of quality of life of 0.1. In addition, transitioning to dead incurs a one-time cost of $4,000. Both the state and transition rewards are constant over time. All parameters of this model are fictitious, not based on a specific disease and described in the table below. We use some prefixed to name our variables and we try to use a `<x>.<y>.<varName>` structure as consistent as possible, with x being the data type prefix, e.g. `a.` for arrays, `m.` for matrix, `df.` for data frames etc. and y being the variable type prefix, e.g. `c.` for costs, `p.` for probabilities, `u.` for utilities etc. 
 
 
 ![State-transition diagram of the 3-state model\label{fig:STM}](../figs/STM diagram.png)
@@ -207,7 +205,7 @@ We can obtain `m.M` from `a.A` by summing the values in each column of `a.A` for
 m.MViaA <- t(colSums(a.A))   # sum over the columns of a.A and transpose 
 ```
 
-Since a Markov model is stochastic, the cohort trace obtained from `a.A` should be idential to `m.M`. We check this using the `==` function. We use rounding on 10 decimals, to avoid wrong `FALSE` results that have to do with floating point comparison issues.
+Since a Markov model is stochastic, the cohort trace obtained from `a.A` should be identical to `m.M`. We check this using the `==` function. We use rounding on 10 decimals, to avoid wrong `FALSE` results that have to do with floating point comparison issues.
 
 ```{r, eval = FALSE, echo = FALSE}
 round(m.M, 10) == round(m.MViaA, 10) # check if they are exactly the same
@@ -318,9 +316,7 @@ save(a.A, file = "../output/Array.RData") # save the object
 ```
 
 ### 07 Estimation of epidemiological measures
-As mentioned in the brief report, full exposition of computing epidemiological measures from A is case-specifid and is beyond the scope of this brief report. 
-
-Ratio of those that transitioned from sick to dead at each cycle to those that transitioned to dead from healthy and sick.
+As mentioned in the brief report, full exposition of computing epidemiological measures from array A is case-specific and is beyond the scope of this brief report. We do however, like to illustrate the concept using a very simple example. For our illustrative 3-state model we can calculate the ratio of those than transitioned from sick to dead at each cycle to those that transitioned to dead from healthy and sick. To calculate this, we initiate a vector of lenght $n.t$ to store the data and since all inidviduals start out healthy the initial value of this vector is 0. Next, we iteratively calculate the ratio.
 
 ```{r}
 v.e <- numeric(n.t)                           # create the vector v.e
@@ -331,19 +327,20 @@ for(t in 1:n.t){ # calculate the ratio for all time points
 }
 ```
 
+Next, we prepare the data to get a nice plot. 
 ```{r}
-plot(v.e) # plot the figure 
 df.e <- as.data.frame(cbind(0:n.t, v.e)) # create a dataframe with cycles and proportion that dies each cycle
 colnames(df.e) <- c("cycle", "proportion") # name the columns of the dataframe
 ```
 
-```{r}
+
+```{r dead ratio, fig.width = 7, fig.height = 4, fig.align = 'center', fig.pos = "h", echo = FALSE, fig.cap = 'Ratio of those dying from sick to those dying from both healthy and sick', message = FALSE, warning = FALSE} 
 ### Plot ratio
 ggplot(df.e, aes(x = cycle, y = proportion)) +
   geom_line(size = 1.3) +
   scale_color_discrete(l = 50, name = "Health state", h = c(45, 365)) +
   xlab("Cycle") +
-  ylab("Ratio S->D vs to all deaths") +
+  ylab("Ratio deaths from sick to al deaths vs to all deaths") +
   ggtitle("Ratio deaths from sick to all deaths") +
   theme_bw(base_size = 16) +
   scale_x_continuous(name = "Cycles", limits = c(0, n.t), breaks = seq(0, n.t, 10)) +
@@ -353,6 +350,6 @@ ggplot(df.e, aes(x = cycle, y = proportion)) +
 
 Our final step is to save the figure in the figs folder. 
 ```{r}
-ggsave("../figs/Proportion_death_from_sick.png", width = 8, height = 6) # save the plot 
+ggsave("../figs/Proportion_death_from_sick.png", width = 8, height = 6) # save the plot
 ``` 
 
