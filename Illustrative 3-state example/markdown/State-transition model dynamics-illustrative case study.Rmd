@@ -1,6 +1,6 @@
 ---
 title: "A multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model."
-subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ. An multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model.'
+subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ. A multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model.'
 date: "`r Sys.Date()`"
 output:
   pdf_document: default
@@ -319,12 +319,10 @@ save(a.A, file = "../output/Array.RData") # save the object
 As mentioned in the brief report, full exposition of computing epidemiological measures from array A is case-specific and is beyond the scope of this brief report. We do however, like to illustrate the concept using a very simple example. For our illustrative 3-state model we can calculate the ratio of those than transitioned from sick to dead at each cycle to those that transitioned to dead from healthy and sick. To calculate this, we initiate a vector of lenght $n.t$ to store the data and since all inidviduals start out healthy the initial value of this vector is 0. Next, we iteratively calculate the ratio.
 
 ```{r}
-v.e <- numeric(n.t)                           # create the vector v.e
-v.e[1] <- 0                                   # initiate the vector
-
-for(t in 1:n.t){ # calculate the ratio for all time points
-  v.e[t + 1] <-  a.A["S", "D", t + 1] / (a.A["H", "D", t + 1] +  a.A["S", "D", t + 1])
-}
+v.e <- numeric(n.t + 1)   # create the vector v.e
+v.e[1] <- 0               # initiate the vector
+# calculate the ratio across all cycles starting in cycle 2
+v.e[-1] <-  a.A["S", "D", -1] / (a.A["H", "D", -1] +  a.A["S", "D", -1])
 ```
 
 Next, we prepare the data to get a nice plot. 
