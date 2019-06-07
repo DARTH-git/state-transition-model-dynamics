@@ -14,25 +14,28 @@ n.states <- length(v.n) # number of health states
 
 #### Generate initial set of base-case external parameters ####
 # Costs
-c.H   = 1000   # cost of remaining one cycle healthy 
-c.S   = 3000   # cost of remaining one cycle sick 
-c.D   = 0      # cost of being dead (per cycle)
+c.H   <- 1000   # cost of remaining one cycle healthy 
+c.S   <- 3000   # cost of remaining one cycle sick 
+c.D   <- 0      # cost of being dead (per cycle)
 # State utilities
-u.H   = 1      # utility when healthy 
-u.S   = 0.60   # utility when sick 
-u.D   = 0      # utility when healthy 
+u.H   <- 1      # utility when healthy 
+u.S   <- 0.60   # utility when sick 
+u.D   <- 0      # utility when healthy 
 # Transition probabilities (per cycle)
-p.HS  = 0.30   # probability to become sick when healthy
-p.HD  = 0.05   # probability to die when healthy
-p.SH  = 0.15   # probability to become healthy when sick
-p.SD  = 0.20   # probability to die when healthy
+p.HS  <- 0.30   # probability to become sick when healthy
+p.HD  <- 0.05   # probability to die when healthy
+p.SH  <- 0.15   # probability to become healthy when sick
+p.SD  <- 0.20   # probability to die when healthy
 # Transition rewards
-du.HS  = 0.10  # one-time utility decrement when becoming sick
-ic.D   = 4000   # one-time cost of dying
+du.HS <- 0.10  # one-time utility decrement when becoming sick
+ic.D  <- 4000   # one-time cost of dying
 
 #### Transition probability matrix ####
 # matrix m.P at the first cycle
-m.P <- matrix(NA, nrow = n.states, ncol = n.states, dimnames = list(v.n, v.n))
+m.P <- matrix(NA, 
+              nrow = n.states, 
+              ncol = n.states, 
+              dimnames = list(v.n, v.n))
 
 # Fill in matrix
 # From Healthy
@@ -48,19 +51,33 @@ m.P["D", "H"]  <- 0
 m.P["D", "S"]  <- 0
 m.P["D", "D"]  <- 1
 
-#### Initial state vector ####
-v.m0 <- c(H = 1, S = 0, D = 0) # initiate the vector
+#### Cohort trace matrix ####
+## Initial state vector
+v.m0 <- c(H = 1, S = 0, D = 0) # all the cohort starts in the Healthy state
 
-## Create the Markov cohort trace matrix m.M that captures the proportion of the cohort in each state at each cycle
-m.M <- matrix(0, nrow = (n.t + 1), ncol = n.states, dimnames = list(0:n.t, v.n)) # initialize cohort trace matrix 
-m.M[1, ] <- v.m0   # store the initial state vector
+## Create the Markov cohort trace matrix m.M that captures the proportion of 
+## the cohort in each state at each cycle
+m.M <- matrix(0, 
+              nrow = (n.t + 1), 
+              ncol = n.states, 
+              dimnames = list(0:n.t, v.n)) # initialize cohort trace matrix 
+m.M[1, ] <- v.m0 # store the initial state vector in the first row of the cohort trace
 
-# initiate the array 
-a.A <- array(0, dim = c(n.states, n.states, n.t + 1), dimnames = list(v.n, v.n, 0:n.t)) # initialize array
+#### Multidimensional array ####
+## Create the multidimensional array a.A that captures the proportion of the 
+## cohort that tranistiones between health states at each cycle
+a.A <- array(0, 
+             dim = c(n.states, n.states, n.t + 1), 
+             dimnames = list(v.n, v.n, 0:n.t)) # initialize multidimensional array
 
-diag(a.A[, , 1]) <- v.m0 # store the initial state vector in the diagonal of A
+diag(a.A[, , 1]) <- v.m0 # store the initial state vector in the diagonal of the first slice of A
 
-m.R.costs <- m.R.effects <- matrix(NA, nrow = n.states, ncol = n.states,  dimnames = list(v.n, v.n))
+#### State and tranisition rewards ####
+## Create matrices to store rewards
+m.R.costs <- m.R.effects <- matrix(NA, 
+                                   nrow = n.states, 
+                                   ncol = n.states,  
+                                   dimnames = list(v.n, v.n))
 
 # Fill in matrix for costs
 # From Healthy
@@ -91,13 +108,16 @@ m.R.effects["D", "S"]  <- u.D
 m.R.effects["D", "D"]  <- u.D 
 
 #### Expected QALYs and Costs per cycle for each strategy ####
-a.Y.costs <- a.Y.effects <- array(0, dim = c(n.states, n.states, n.t + 1), dimnames = list(v.n, v.n, 0:n.t))
+## Create multidimensional arrays to store expected outcomes
+a.Y.costs <- a.Y.effects <- array(0, 
+                                  dim = c(n.states, n.states, n.t + 1), 
+                                  dimnames = list(v.n, v.n, 0:n.t))
 
 # Initialize arrays
 a.Y.costs[, , 1]   <- a.A[, , 1] * m.R.costs   
 a.Y.effects[, , 1] <- a.A[, , 1] * m.R.effects 
 
-### Run the model 
+#### Run the cSTM ####
 for(t in 1:n.t){  # loop through the number of cycles
   # estimate the state vector for the next cycle (t + 1)
   m.M[t + 1, ] <- m.M[t, ] %*% m.P    
@@ -108,7 +128,7 @@ for(t in 1:n.t){  # loop through the number of cycles
   a.Y.effects[, , t + 1] <- a.A[, , t + 1] * m.R.effects 
 }
 
-# Perform a cost-effectiveness analysis 
+#### Aggregate outcomes ####
 v.costs <- rowSums(t(colSums(a.Y.costs)))    # calculate the expected costs per cycle
 v.QALYs <- rowSums(t(colSums(a.Y.effects)))  # calculate the expected QALYs per cycle
 TC <- sum(v.costs)                           # calculate the total expected costs
@@ -120,9 +140,8 @@ v.results                                    # print the results
 
 ################################################################################
 ### Ratio of those that transitioned from sick to dead at each cycle to those that transitioned to dead from both healthy and sick.
-v.e <- numeric(n.t)            # create the vector v.e
-v.e[1] <- 0                    # initiate the vector
+v.e <- numeric(n.t + 1)   # create the vector v.e
+v.e[1] <- 0               # initiate the vector
 
-for(t in 1:n.t){ # calculate the ratio for all time points
-  v.e[t + 1] <-  a.A["S", "D", t + 1] / (a.A["H", "D", t + 1] +  a.A["S", "D", t + 1])
-}
+### calculate the ratio across all cycles starting in cycle 2
+v.e[-1] <-  a.A["S", "D", -1] / (a.A["H", "D", -1] +  a.A["S", "D", -1])
