@@ -121,7 +121,7 @@ a.Y.effects[, , 1] <- a.A[, , 1] * m.R.effects
 for(t in 1:n.t){  # loop through the number of cycles
   # estimate the state vector for the next cycle (t + 1)
   m.M[t + 1, ] <- m.M[t, ] %*% m.P    
-  a.A[, , t + 1] <- diag(m.M[t, ]) %*% m.P  # fill array A for t + 1 
+  a.A[, , t + 1] <- diag(m.M[t, ]) %*% m.P  # estimate the transition dynamics at t + 1
   
   # element-wise-multiplication of array A with the rewards matrices
   a.Y.costs[, , t + 1]   <- a.A[, , t + 1] * m.R.costs   

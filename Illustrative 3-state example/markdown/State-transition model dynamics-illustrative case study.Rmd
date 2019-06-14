@@ -181,7 +181,7 @@ Now we run the model using the dynamics array approach. In this approach, iterat
 ```{r, message = FALSE, warning = FALSE}
 # run the model 
 for(t in 1:n.t){                     # loop through the number of cycles
-  a.A[, , t + 1] <- colSums(a.A[, , t]) * m.P  # fill array A for t + 1 
+  a.A[, , t + 1] <- colSums(a.A[, , t]) * m.P  # estimate the transition dynamics at t + 1
 }
 ```
 
@@ -311,8 +311,8 @@ ggplot(melt(m.M), aes(x = Var1, y = value, color = Var2)) +
 
 At the end of the model we save the important objects so they can be used without the need to run the model again. 
 ```{r}
-save(m.M, file = "../output/Cohort_trace.RData") # save the object 
-save(a.A, file = "../output/Array.RData") # save the object 
+save(m.M, file = "../output/cohort_trace.RData") # save the object 
+save(a.A, file = "../output/array.RData") # save the object 
 ```
 
 ### 07 Estimation of epidemiological measures
