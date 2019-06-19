@@ -1,6 +1,6 @@
 ---
-title: "A multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model."
-subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ. A multidimensional-array representation of state-transition model dynamics - Illustrative healthy-sick-dead 3-state model.'
+title: "Illustrative healthy-sick-dead 3-state model"
+subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ.' **A multidimensional array representation of state-transition model dynamics.** (submitted, June 2019)
 date: "`r Sys.Date()`"
 output:
   pdf_document: default
