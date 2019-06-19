@@ -1,4 +1,4 @@
-# A multidimensional array representation of state-transition model dynamics
+# A Multidimensional Array Representation of State-transition Model Dynamics
 This GitHub repository provides the code of the method and exemplary cohort state-tranistion model (cSTM) explained in the following manuscript: 
 
 - Krijkamp EM, Alarid-Escudero F, Enns EA, Pechlivanoglou P, Hunink MGM, Jalal HJ. A multidimensional array representation of state-transition model dynamics.
