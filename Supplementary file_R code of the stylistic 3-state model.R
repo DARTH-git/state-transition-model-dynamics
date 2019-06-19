@@ -25,7 +25,7 @@ u.D   <- 0      # utility when healthy
 p.HS  <- 0.30   # probability to become sick when healthy
 p.HD  <- 0.05   # probability to die when healthy
 p.SH  <- 0.15   # probability to become healthy when sick
-p.SD  <- 0.20   # probability to die when healthy
+p.SD  <- 0.20   # probability to die when sick
 # Transition rewards
 du.HS <- 0.10  # one-time utility decrement when becoming sick
 ic.D  <- 4000   # one-time cost of dying

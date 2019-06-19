@@ -31,7 +31,7 @@ rm(list = ls())  # remove any variables in R's memory
 ```
 
 ## Illustrative 3-state cohort model
-In this illustrative example, we follow a cohort of healthy 70-year-old individuals over their remaining lifetime, using 30 annual cycles. The healthy individuals can get sick or they can die. Sick individuals can fully recover, transitioning back to healthy, remain sick or die. The state-transition diagram is shown in Figure \ref{fig:STM}. Remaining in each of these health states is associated with some utilities and costs (the state rewards).  In addition to these state rewards, transition dis-utilities and costs apply. Getting sick is associated with a sudden decrease of quality of life of 0.1. In addition, transitioning to dead incurs a one-time cost of $4,000. Both the state and transition rewards are constant over time. All parameters of this model are fictitious, not based on a specific disease and described in the table below. We use some prefixed to name our variables and we try to use a `<x>.<y>.<varName>` structure as consistent as possible, with x being the data type prefix, e.g. `a.` for arrays, `m.` for matrix, `df.` for data frames etc. and y being the variable type prefix, e.g. `c.` for costs, `p.` for probabilities, `u.` for utilities etc. 
+In this illustrative example, we follow a cohort of healthy 70-year-old individuals over their remaining lifetime, using 30 annual cycles. The healthy individuals can get sick, they can die or stay healthy. Sick individuals can fully recover, transitioning back to healthy, remain sick or die. The state-transition diagram is shown in Figure \ref{fig:STM}. Remaining in each of these health states is associated with some utilities and costs (the state rewards).  In addition to these state rewards, transition dis-utilities and costs apply. Getting sick is associated with a sudden decrease of quality of life of 0.1. In addition, transitioning to dead incurs a one-time cost of $4,000. Both the state and transition rewards are constant over time. All parameters of this model are fictitious, not based on a specific disease and described in the table below. We use some prefixed to name our variables and we try to use a `<x>.<y>.<varName>` structure as consistent as possible, with x being the data type prefix, e.g. `a.` for arrays, `m.` for matrix, `df.` for data frames etc. and y being the variable type prefix, e.g. `c.` for costs, `p.` for probabilities, `u.` for utilities etc. 
 
 
 ![State-transition diagram of the 3-state model\label{fig:STM}](../figs/STM diagram.png)
@@ -95,7 +95,7 @@ u.D   <- 0      # utility when healthy
 p.HS  <- 0.30   # probability to become sick when healthy
 p.HD  <- 0.05   # probability to die when healthy
 p.SH  <- 0.15   # probability to become healthy when sick
-p.SD  <- 0.20   # probability to die when healthy
+p.SD  <- 0.20   # probability to die when sick
 # Transition rewards
 du.HS <- 0.10   # one-time utility decrement when becoming sick
 ic.D  <- 4000   # one-time cost of dying
