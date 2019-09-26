@@ -349,6 +349,7 @@ Our final step is to save the figure in the figs folder.
 ```{r}
 ggsave("../figs/Proportion_death_from_sick.png", width = 8, height = 6) # save the plot
 ``` 
+
 \newpage
 ## References
 Alarid-Escudero, Fernando et al. 2019. “A Need for Change! A Coding Framework for Improving Transparency in Decision Modeling.” PharmacoEconomics. https://doi.org/10.1007/s40273-019-00837-x.
