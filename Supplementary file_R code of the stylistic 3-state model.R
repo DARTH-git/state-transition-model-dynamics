@@ -32,10 +32,6 @@ p_SD  <- 0.20   # probability to die when sick
 du_HS <- 0.10  # one-time utility decrement when becoming sick
 ic_D  <- 4000   # one-time cost of dying
 
-
-
-
-
 #### Transition probability matrix ####
 # matrix m_P at the first cycle
 m_P <- matrix(NA, 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.12)  25 SEP 2019 12:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.12)  26 SEP 2019 10:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -668,11 +668,11 @@ LaTeX Font Info:    Try loading font information for T1+lmtt on input line 151.
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<../figs/STM diagram.png, id=41, 269.808pt x 263.5446pt>
+<../figs/STM diagram.png, id=41, 249.5724pt x 249.5724pt>
 File: ../figs/STM diagram.png Graphic file (type png)
 <use ../figs/STM diagram.png>
 Package pdftex.def Info: ../figs/STM diagram.png  used on input line 161.
-(pdftex.def)             Requested size: 269.81969pt x 263.556pt.
+(pdftex.def)             Requested size: 249.57939pt x 249.57939pt.
 LaTeX Font Info:    Try loading font information for OT1+lmr on input line 170.
 
 (/Users/elinekrijkamp/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
@@ -775,7 +775,7 @@ type1/public/lm/lmtk10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fon
 ts/type1/public/lm/lmtt10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/
 fonts/type1/public/lm/lmtti10.pfb>
 Output written on State-transition-model-dynamics-illustrative-case-study.pdf (
-10 pages, 297069 bytes).
+10 pages, 295131 bytes).
 PDF statistics:
  177 PDF objects out of 1000 (max. 8388607)
  144 compressed objects within 2 object streams
