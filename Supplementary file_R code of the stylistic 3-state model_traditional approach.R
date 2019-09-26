@@ -112,12 +112,12 @@ for(t in 1:n_t){  # loop through the number of cycles
 
 #### Aggregate outcomes ####
 v_costs <- m_M %*% v_R_costs                # calculate the expected costs per cycle
-v_QALYs <- m_M %*% v_R_effects               # calculate the expected QALYs per cycle
+v_QALYs <- m_M %*% v_R_effects              # calculate the expected QALYs per cycle
 
 # apply upfront costs
-v_costs_upfront <- v_effects_upfront <- c(0, 0, 0, 0, 0)
+v_costs_upfront <- v_effect_upfront <- c(0, 0, 0, 0, 0)
 v_costs[1] <- m_M[1, ] %*% v_costs_upfront 
-v_QALYs[1] <- m_M[1, ] %*% v_effects_upfront
+v_QALYs[1] <- m_M[1, ] %*% v_effect_upfront
 
 TC <- sum(v_costs)                           # calculate the total expected costs
 TE <- sum(v_QALYs)                           # calculate the total expected QALYS

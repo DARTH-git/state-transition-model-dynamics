@@ -119,11 +119,11 @@ a_Y_costs <- a_Y_effects <- array(0,
                                   dim = c(n_states, n_states, n_t + 1), 
                                   dimnames = list(v_n, v_n, 0:n_t))
 
-# Apply initial upfront costs or effects if needed
+# Apply initial up-front rewards (if applicable) 
 v_costs_upfront <- c(0, 0, 0)
-v_effects_upfront <- c(0, 0, 0)
+v_effect_upfront <- c(0, 0, 0)
 diag(a_Y_costs[, , 1])   <- diag(a_A[, , 1]) * v_costs_upfront   
-diag(a_Y_effects[, , 1]) <- diag(a_A[, , 1]) * v_effects_upfront
+diag(a_Y_effects[, , 1]) <- diag(a_A[, , 1]) * v_effect_upfront
 
 #### Run the cSTM ####
 for(t in 1:n_t){  # loop through the number of cycles
