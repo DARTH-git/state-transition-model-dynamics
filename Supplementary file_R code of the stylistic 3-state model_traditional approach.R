@@ -1,4 +1,4 @@
-## Illustrative stylistic 3-state model showing the tranditional appraoch ## 
+## Illustrative stylistic 3-state model showing the traditional approach  ## 
 
 # Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Jalal HJ.' **A multidimensional array representation of state-transition model dynamics.** (revised, September 2019)
 
