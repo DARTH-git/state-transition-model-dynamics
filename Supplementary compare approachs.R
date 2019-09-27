@@ -13,22 +13,22 @@ source("Supplementary file_cohort_trace_appraoch_R code of the stylistic 3-state
 # Store the results in a new variable
 v_results_cohort_trace_approach <- v_results
 
-# Create a new trace matrix to sum the markov trace of the cohort trace approach.
+# Create a new trace matrix to sum the Markov trace of the cohort trace approach.
 m_M_cohort_trace_approach <- matrix(NA, 
                                     nrow = n_t + 1 , 
                                     ncol  = 3)
-colnames(m_M_cohort_trace_approach) <- colnames(m_M_array_appraoch) # name the columns
+colnames(m_M_cohort_trace_approach) <- colnames(m_M_array_approach) # name the columns
 
 # Store the data in the right column
 m_M_cohort_trace_approach[, "H"] <- m_M[, "H"]
 m_M_cohort_trace_approach[, "S"] <- m_M[,"Stemp"] + m_M[, "S"] # sum the proportions of sick (Stemp + S)
 m_M_cohort_trace_approach[, "D"] <- m_M[,"Dtemp"] + m_M[, "D"] # sum the proportions of dead (Dtemp + D)
 
-# Compare the two Markov traces 
+# Compare the two Markov traces rounded on 10 decimal points
 round(m_M_cohort_trace_approach, 10) == round(m_M_array_approach, 10)
+# TRUE indicated that the values are identical 
 
-# Compare the costs and effects
-round(v_results_array_approach["Costs"], 5) == round(v_results_cohort_trace_approach["Costs"], 5)
-round(v_results_array_approach["Effect"], 5) == round(v_results_cohort_trace_approach["Effect"], 5)
-
+# Compare the costs and effects rounded on 5 decimal points
+round(v_results_array_approach["Costs"], 10) == round(v_results_cohort_trace_approach["Costs"], 10)
+round(v_results_array_approach["Effect"], 10) == round(v_results_cohort_trace_approach["Effect"], 10)
 

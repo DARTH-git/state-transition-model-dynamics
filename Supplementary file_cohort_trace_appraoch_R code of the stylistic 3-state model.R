@@ -30,7 +30,7 @@ p_HD  <- 0.05   # probability to die when healthy
 p_SH  <- 0.15   # probability to become healthy when sick
 p_SD  <- 0.20   # probability to die when sick
 # Transition rewards
-du_HS <- 0.10  # one-time utility decrement when becoming sick
+du_HS <- 0.10   # one-time utility decrement when becoming sick
 ic_D  <- 4000   # one-time cost of dying
 
 #### Transition probability matrix ####
@@ -49,18 +49,18 @@ m_P["H", "Dtemp"]  <- p_HD
 m_P["H", "D"]      <- 0
 
 # From Sick temporary (first cycle being sick)
-m_P["Stemp", "H"]      <- p_SH
-m_P["Stemp", "Stemp"]  <- 0
-m_P["Stemp", "S"]      <- 1 - (p_SH + p_SD)
-m_P["Stemp", "Dtemp"]  <- p_SD
-m_P["Stemp", "D"]      <- 0
+m_P["Stemp", "H"]     <- p_SH
+m_P["Stemp", "Stemp"] <- 0
+m_P["Stemp", "S"]     <- 1 - (p_SH + p_SD)
+m_P["Stemp", "Dtemp"] <- p_SD
+m_P["Stemp", "D"]     <- 0
 
 # From Sick
-m_P["S", "H"]      <- p_SH
-m_P["S", "Stemp"]  <- 0
-m_P["S", "S"]      <- 1 - (p_SH + p_SD)
-m_P["S", "Dtemp"]  <- p_SD
-m_P["S", "D"]      <- 0
+m_P["S", "H"]         <- p_SH
+m_P["S", "Stemp"]     <- 0
+m_P["S", "S"]         <- 1 - (p_SH + p_SD)
+m_P["S", "Dtemp"]     <- p_SD
+m_P["S", "D"]         <- 0
 
 # From Death temporary
 m_P["Dtemp", "H"]     <- 0
@@ -70,15 +70,15 @@ m_P["Dtemp", "Dtemp"] <- 0
 m_P["Dtemp", "D"]     <- 1
 
 # From Death
-m_P["D", "H"]      <- 0
-m_P["D", "Stemp"]  <- 0
-m_P["D", "S"]      <- 0
-m_P["D", "Dtemp"]  <- 0
-m_P["D", "D"]      <- 1
+m_P["D", "H"]         <- 0
+m_P["D", "Stemp"]     <- 0
+m_P["D", "S"]         <- 0
+m_P["D", "Dtemp"]     <- 0
+m_P["D", "D"]         <- 1
 
 #### Cohort trace matrix ####
 ## Initial state vector
-v_m0 <- c(H = 1, Stemp = 0, S = 0, D = 0, Dtemp = 0) # all the cohort starts in the Healthy state
+v_m0 <- c(H = 1, Stemp = 0, S = 0, D = 0, Dtemp = 0) # the cohort starts healthy
 
 ## Create the Markov cohort trace matrix m_M that captures the proportion of 
 ## the cohort in each state at each cycle
@@ -89,7 +89,7 @@ m_M <- matrix(0,
 m_M[1, ] <- v_m0 # store the initial state vector in the first row of the cohort trace
 
 
-#### State and tranisition rewards ####
+#### State and transition rewards ####
 ## Create a vector to store rewards
 v_R_costs   <- c(c_H, c_S, c_S, c_D + ic_D, c_D)
 v_R_effects <- c(u_H, u_S - du_HS, u_S, u_D, u_D)
@@ -102,8 +102,6 @@ m_Y_costs <- m_Y_effects <- matrix(0,
                                    ncol = n_states,  
                                    dimnames = list(v_n, v_n))
 
-
-
 #### Run the cSTM ####
 for(t in 1:n_t){  # loop through the number of cycles
   # estimate the state vector for the next cycle (t + 1)
@@ -111,20 +109,14 @@ for(t in 1:n_t){  # loop through the number of cycles
 }
 
 #### Aggregate outcomes ####
-v_costs <- m_M %*% v_R_costs                # calculate the expected costs per cycle
-v_QALYs <- m_M %*% v_R_effects              # calculate the expected QALYs per cycle
+v_costs <- m_M %*% v_R_costs          # calculate the expected costs per cycle
+v_QALYs <- m_M %*% v_R_effects        # calculate the expected QALYs per cycle
 
-TC <- sum(v_costs)                           # calculate the total expected costs
-TE <- sum(v_QALYs)                           # calculate the total expected QALYS
-v_results <- c(TC, TE)                       # combine the total expected costs and QALYs
-names(v_results) <- c("Costs", "Effect")     # name the vector
-v_results                                    # print the results  
+TC <- sum(v_costs)                    # calculate the total expected costs
+TE <- sum(v_QALYs)                    # calculate the total expected QALYS
+v_results <- c(TC, TE)                # combine the total expected costs and QALYs
+names(v_results) <- c("Costs", "Effect")  # name the vector
+v_results                             # print the results  
 
 ################################################################################
-### Ratio of those that transitioned from sick to dead at each cycle to those that transitioned to dead from both healthy and sick.
-v_e <- numeric(n_t + 1)   # create the vector v_e
-v_e[1] <- 0               # initiate the vector
-
-### calculate the ratio across all cycles starting in cycle 2
-v_e[-1] <-  a_A["S", "D", -1] / (a_A["H", "D", -1] +  a_A["S", "D", -1])
-
+## Calculation of the ratio of those that transitioned from sick to dead at each cycle to those that transitioned to dead from both healthy and sick would require an additional health state to distinguish those that died from healthy from those that died from being sick. 

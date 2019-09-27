@@ -67,14 +67,14 @@ m_M[1, ] <- v_m0 # store the initial state vector in the first row of the cohort
 
 #### Multidimensional array ####
 ## Create the multidimensional array a_A that captures the proportion of the 
-## cohort that tranistiones between health states at each cycle
+## cohort that transitioned between health states at each cycle
 a_A <- array(0, 
              dim = c(n_states, n_states, n_t + 1), 
              dimnames = list(v_n, v_n, 0:n_t)) # initialize multidimensional array
 
 diag(a_A[, , 1]) <- v_m0 # store the initial state vector in the diagonal of the first slice of A
 
-#### State and tranisition rewards ####
+#### State and transition rewards ####
 ## Create matrices to store rewards
 m_R_costs <- m_R_effects <- matrix(NA, 
                                    nrow = n_states, 
