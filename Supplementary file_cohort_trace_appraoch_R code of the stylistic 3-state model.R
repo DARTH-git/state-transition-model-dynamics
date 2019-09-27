@@ -89,24 +89,20 @@ m_M <- matrix(0,
 m_M[1, ] <- v_m0 # store the initial state vector in the first row of the cohort trace
 
 
-#### State and transition rewards ####
-## Create a vector to store rewards
-v_R_costs   <- c(c_H, c_S, c_S, c_D + ic_D, c_D)
-v_R_effects <- c(u_H, u_S - du_HS, u_S, u_D, u_D)
-names(v_R_costs) <- names(v_R_effects) <- v_n
-
-#### Expected QALYs and Costs per cycle for each strategy ####
-## Create matrix to store expected outcomes
-m_Y_costs <- m_Y_effects <- matrix(0, 
-                                   nrow = n_states, 
-                                   ncol = n_states,  
-                                   dimnames = list(v_n, v_n))
-
 #### Run the cSTM ####
 for(t in 1:n_t){  # loop through the number of cycles
   # estimate the state vector for the next cycle (t + 1)
   m_M[t + 1, ] <- m_M[t, ] %*% m_P    
 }
+
+
+#### Expected QALYs and Costs per cycle for each strategy ####
+
+#### State and transition rewards ####
+## Create a vector to store rewards
+v_R_costs   <- c(c_H, c_S, c_S, c_D + ic_D, c_D)
+v_R_effects <- c(u_H, u_S - du_HS, u_S, u_D, u_D)
+names(v_R_costs) <- names(v_R_effects) <- v_n
 
 #### Aggregate outcomes ####
 v_costs <- m_M %*% v_R_costs          # calculate the expected costs per cycle

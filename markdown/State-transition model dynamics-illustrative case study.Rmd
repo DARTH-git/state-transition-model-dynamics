@@ -167,6 +167,7 @@ Running the model using equation 3, results in the traditional cohort trace. Thi
 
 ### 04 Dynamics-array approach  
 The dynamics-array approach starts similar as the traditional cohort trace approach, meaning that the first two sections are identical for the two approaches. The biggest difference is the additional array structure of dimensions `n_states` x `n_states` x `n_t` to store the transition dynamics. In `R` indexing start at 1, therefore, we initialize the array `a_A` using `n_state` + 1. This allows us to store the results from cycle 0 until cycle `n_t`. The initial state vectors `v_m0` is used to inform the initial cycle of the array. 
+
 #### Equation 5
 ```{r, message = FALSE, warning = FALSE}
 a_A <- array(0, dim = c(n_states, n_states, n_t + 1),
@@ -222,31 +223,31 @@ m_R_costs <- m_R_effects <- matrix(NA,
                   dimnames = list(v_n, v_n))
     
 # Fill in matrix for costs
-# From Healthy
+# To Healthy
 m_R_costs["H", "H"]  <- c_H
-m_R_costs["H", "S"]  <- c_H 
-m_R_costs["H", "D"]  <- c_H + ic_D
-# From Sick
-m_R_costs["S", "H"]  <- c_S
+m_R_costs["S", "H"]  <- c_H 
+m_R_costs["D", "H"]  <- c_H 
+# To Sick
+m_R_costs["H", "S"]  <- c_S
 m_R_costs["S", "S"]  <- c_S 
-m_R_costs["S", "D"]  <- c_S + ic_D
-# From Death
-m_R_costs["D", "H"]  <- c_D
-m_R_costs["D", "S"]  <- c_D
+m_R_costs["D", "S"]  <- c_S 
+# To Death
+m_R_costs["H", "D"]  <- c_D + ic_D
+m_R_costs["S", "D"]  <- c_D + ic_D
 m_R_costs["D", "D"]  <- c_D 
 
 # Fill in matrix for effects
-# From Healthy
+# To Healthy
 m_R_effects["H", "H"]  <- u_H
-m_R_effects["H", "S"]  <- u_H - du_HS 
-m_R_effects["H", "D"]  <- u_H 
-# From Sick
-m_R_effects["S", "H"]  <- u_S
+m_R_effects["S", "H"]  <- u_H 
+m_R_effects["D", "H"]  <- u_H 
+# To Sick
+m_R_effects["H", "S"]  <- u_S - du_HS
 m_R_effects["S", "S"]  <- u_S 
-m_R_effects["S", "D"]  <- u_S 
-# From Death
-m_R_effects["D", "H"]  <- u_D
-m_R_effects["D", "S"]  <- u_D
+m_R_effects["D", "S"]  <- u_S 
+# to Death
+m_R_effects["H", "D"]  <- u_D
+m_R_effects["S", "D"]  <- u_D
 m_R_effects["D", "D"]  <- u_D 
 ```
 
@@ -263,9 +264,10 @@ In this section we create outcome arrays, `a_Y`, one for costs, `a_Y_costs`, and
 #### 05.2 Expected QALYs and Costs per cycle for each strategy ####
 a_Y_costs <- a_Y_effects <- array(0, dim = c(n_states, n_states, n_t + 1),
              dimnames = list(v_n, v_n, 0:n_t))
-# initialixe arrays 
+
+# initialize arrays 
 a_Y_costs[, , 1]   <- a_A[, , 1] * m_R_costs  
-a_Y_effects[, , 1] <- a_A[, , 1] * m_R_costs  
+a_Y_effects[, , 1] <- a_A[, , 1] * m_R_effects  
 
 for(t in 1:n_t){ 
 # element-wise-multiplication of array A with the rewards matrices
@@ -350,10 +352,125 @@ Our final step is to save the figure in the figs folder.
 ggsave("../figs/Proportion_death_from_sick.png", width = 8, height = 6) # save the plot
 ``` 
 
+\newpage
 
-## Traditional cohort trace approach
+## Using the traditional cohort trace approach
+With the tranditional approach the Markov trace is calculated every cycle. This trace only shows how the cohort is distributed among the different health states over time, but no information about the transitions is available. In our stylistic 3-state model getting sick is associated with a sudden decrease of quality of life of 0.1 and in addition transitioning to dead incurs a one-time cost of \$4,000. To incorporate these rewards we need to make two extra temporary health states. One temporary states for those that transitioned to sick, Stemp, and one temporary state for those that die, Dtemp. The Stemp state makes is possible to incorporate the sudden decrease of quality of life and the Dtemp states is used to incorporate the extra cost. This means that with the traditional approach our model would have five health states: Healthy, Sick temporary, Sick, Dead temporary and Dead (see Figure \ref{fig:STM-cohort}). The healthy individuals can transition to sick temporary state, dead temporary state or stay healthy. Temporary sick individuals, those that just turned sick, can fully recover, transitioning back to healthy, transition to the Dead temporary state or remain sick, which means that they transition to Sick. Sick individuals, can also fully recover, transitioning back to healthy, can transition to dead temporary or stay sick, which means they remain in the sick state. All individuals in the temporary dead state transition to the dead states. The dead state is the absorbing states.   
 
-![State-transition diagram of the 3-state model when using the cohort trace approach \label{fig:STM}](../figs/STM_diagram_cohort_approach.png)
+![State-transition diagram of the 3-state model when using the cohort trace approach. The dashed lines around the temporary health states indicate that the individuals can only stay in that health state for one cycle. \label{fig:STM-cohort}](../figs/STM_diagram_cohort_approach.png)
+
+In the next sections we describe how to run the model using the traditional cohort trace approach. All parameters are similar we and only provide code for parts that are different compared to the dynamics array appraoch 
+
+### Extra temporary health states
+
+For this model we need two temporary health state in addition to the 3 main states of the model. A temporary health state is a state in which an individual can only stay for one cycle. After one cycle the individual has to transition to a new cycle. A temporary health state for sick is needed to be able to apply the sudden decrease of utility for individuals that transition from healthy to dead. We call this health state sick temporary, in short Stemp. In addition, a temporary health state for dead is needed in order to apply the costs associated with this transition. This health state is called Dtemp. This means that the tranditional cohort trace approach has five health states compared with 3 in the array appraoch. 
+```{r}
+v_n <- c("H", "Stemp", "S", "Dtemp", "D") # vector with the 3 health states of the model:
+# Healthy (H), Sick (S), Dead (D) and two temporary health states one for Sick for the first time (Stemp) and one for dying (Dtemp)
+n_states <- length(v_n) # number of health states 
+```
+
+The transition probability matrix now has `r n_states` and `r n_states` columns.
+
+```{r}
+#### Transition probability matrix ####
+# matrix m_P at the first cycle
+m_P <- matrix(NA, 
+              nrow = n_states, 
+              ncol = n_states, 
+              dimnames = list(v_n, v_n))
+```
+
+The matrix is filled in a similar way compared to the array appraoch described above. Healthy individuals can only transition to the temporary sick, Stemp, or dead, Dtemp, state or they stay healthy. Healthy inidviduals can not transtion to sick, S, or dead, D. 
+
+```{r}
+# Fill in matrix
+# From Healthy
+m_P["H", "H"]      <- 1 - (p_HS + p_HD)
+m_P["H", "Stemp"]  <- p_HS
+m_P["H", "S"]      <- 0
+m_P["H", "Dtemp"]  <- p_HD
+m_P["H", "D"]      <- 0
+
+# From Sick temporary (first cycle being sick)
+m_P["Stemp", "H"]     <- p_SH
+m_P["Stemp", "Stemp"] <- 0
+m_P["Stemp", "S"]     <- 1 - (p_SH + p_SD)
+m_P["Stemp", "Dtemp"] <- p_SD
+m_P["Stemp", "D"]     <- 0
+
+# From Sick
+m_P["S", "H"]         <- p_SH
+m_P["S", "Stemp"]     <- 0
+m_P["S", "S"]         <- 1 - (p_SH + p_SD)
+m_P["S", "Dtemp"]     <- p_SD
+m_P["S", "D"]         <- 0
+
+# From Death temporary
+m_P["Dtemp", "H"]     <- 0
+m_P["Dtemp", "Stemp"] <- 0
+m_P["Dtemp", "S"]     <- 0
+m_P["Dtemp", "Dtemp"] <- 0
+m_P["Dtemp", "D"]     <- 1
+
+# From Death
+m_P["D", "H"]         <- 0
+m_P["D", "Stemp"]     <- 0
+m_P["D", "S"]         <- 0
+m_P["D", "Dtemp"]     <- 0
+m_P["D", "D"]         <- 1
+
+m_P # print the matrix 
+```
+
+All individuals in the cohort start out healthy and this information is stored in the Markov cohort trace. 
+```{r}
+#### Cohort trace matrix ####
+## Initial state vector
+v_m0 <- c(H = 1, Stemp = 0, S = 0, D = 0, Dtemp = 0) # the cohort starts healthy
+
+## Create the Markov cohort trace matrix m_M that captures the proportion of the cohort in each state at each cycle
+m_M <- matrix(0, 
+              nrow = (n_t + 1), 
+              ncol = n_states, 
+              dimnames = list(0:n_t, v_n)) # initialize cohort trace matrix 
+m_M[1, ] <- v_m0 # store the initial state vector in the first row of the cohort trace
+```
+
+Now we iteratively run the model
+```{r}
+#### Run the cSTM ####
+for(t in 1:n_t){  # loop through the number of cycles
+  # estimate the state vector for the next cycle (t + 1)
+  m_M[t + 1, ] <- m_M[t, ] %*% m_P    
+}
+
+head(m_M)
+```
+
+
+While the array approach requiers an matrix to apply the rewards, with the traditional cohort approach two vectors are enough. One vector for the utilities and one for the costs is created. The costs of dying, `ic_D` of values \$`r ic_D` is applies to the proportion of the cohort in the temporary dead state. This are the individuals that just died and made those costs. The utility decrement `du_HS` is substracted from the utily of being sick in the temporary health state. That is the proportion of the cohort that just transitioned from healthy to sick. 
+
+```{r}
+#### State and transition rewards ####
+## Create a vector to store rewards
+v_R_costs   <- c(c_H, c_S, c_S, c_D + ic_D, c_D)
+v_R_effects <- c(u_H, u_S - du_HS, u_S, u_D, u_D)
+names(v_R_costs) <- names(v_R_effects) <- v_n
+```
+
+The expected QALYs and costs per cycle in turn can be calculated by matrix multiplication of `m_M` with the vector for costs `v_R_costs` and `v_R_effects`. 
+```{r}
+#### Aggregate outcomes ####
+v_costs <- m_M %*% v_R_costs          # calculate the expected costs per cycle
+v_QALYs <- m_M %*% v_R_effects        # calculate the expected QALYs per cycle
+
+TC <- sum(v_costs)                    # calculate the total expected costs
+TE <- sum(v_QALYs)                    # calculate the total expected QALYS
+v_results <- c(TC, TE)                # combine the total expected costs and QALYs
+names(v_results) <- c("Costs", "Effect")  # name the vector
+v_results                             # print the results  
+```
 
 \newpage
 ## References
