@@ -1,7 +1,7 @@
 ---
 title: "Simulation study of efficiency of STM methods"
 subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Yang, A., Jalal HJ.' **A multidimensional array representation of state-transition model** (revised, September 2019)
-author: "Alan Yang, modified by Eline Krijkamp"
+author: "Author of the simulation study: Alan Yang, graphs modified by Eline Krijkamp"
 date: "9/26/2019"
 output:
   html_document: default
@@ -13,9 +13,9 @@ always_allow_html: yes
 
 For an explanation see the paper or Markdown document. This file only contains the code for the figures. 
 
-**Compare time:**
+##Compare time:
 
-2D line graph - by state, at 1320 cycles
+**2D line graph - by state, at 1320 cycles**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
 library(plotly)
@@ -78,7 +78,7 @@ ggsave("2D_time_zoom.png")
 
 
 
-3D Scatter plot:
+**3D Scatter plot:**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, include = TRUE}
 time_mem_both <- read.csv('time_memory_comparisons_more_cycles.csv', 
@@ -135,9 +135,9 @@ p %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_me
 
 
 
-**Compare storage:**
+##Compare storage:
 
-3D Scatter plot:
+**3D Scatter plot:**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, include = TRUE}
 p1 <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$memory, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = '#FDAD1E'),  connectgaps = FALSE) %>% layout(scene = list(yaxis = axy)) %>%
@@ -150,12 +150,31 @@ p1 %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_m
 
 ```
 
+
+To save these figures we performed the following steps manually:
+
+1. knit to html 
+
+2. zoom in with html 
+
+3. use printscreen button 
+
+4. past it to paint (or powerpoint) 
+
+5. crop 
+
+6. save as png (and pdf) 
+
+
+
+
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, out.width = '100%'}
+# After saving the figure you can import it in the markdow
 #knitr::include_graphics("3D_memory.png")
 ```
 
 
-2D line graph - by state, at 1320 cycles
+**2D line graph - by state, at 1320 cycles**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
 options(scipen = 999)
@@ -176,7 +195,7 @@ ggsave("2D_memory.png")
 ```
 
 
-2D combined plots:
+**2D combined plots:**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
 time_mem_both_2D[, "Time (in seconds)"] <- time_mem_both_2D$time
