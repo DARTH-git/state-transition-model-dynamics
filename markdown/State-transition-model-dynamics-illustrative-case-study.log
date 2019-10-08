@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.12)  8 OCT 2019 17:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.12)  8 OCT 2019 19:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -753,11 +753,11 @@ File: ../figs/2D_time_memory.png Graphic file (type png)
 <use ../figs/2D_time_memory.png>
 Package pdftex.def Info: ../figs/2D_time_memory.png  used on input line 994.
 (pdftex.def)             Requested size: 469.74834pt x 290.18289pt.
-<../figs/2D_time_zoom.png, id=166, 2195.20125pt x 1356.06625pt>
+<../figs/2D_time_zoom.png, id=166, 2106.87125pt x 1504.62125pt>
 File: ../figs/2D_time_zoom.png Graphic file (type png)
 <use ../figs/2D_time_zoom.png>
 Package pdftex.def Info: ../figs/2D_time_zoom.png  used on input line 1004.
-(pdftex.def)             Requested size: 469.74834pt x 290.18289pt.
+(pdftex.def)             Requested size: 469.74986pt x 335.47168pt.
 <../figs/3D_time.png, id=168, 717.882pt x 447.5922pt>
 File: ../figs/3D_time.png Graphic file (type png)
 <use ../figs/3D_time.png>
@@ -780,13 +780,13 @@ Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1068.
 
 Package rerunfilecheck Info: File `State-transition-model-dynamics-illustrative
 -case-study.out' has not changed.
-(rerunfilecheck)             Checksum: 70BD9BA6CBB9342DCF15C4B1A8C967F8;2665.
+(rerunfilecheck)             Checksum: 5B082F03ED33A9FDC161471C2B2A1244;2645.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1068.
  ) 
 Here is how much of TeX's memory you used:
  10889 strings out of 494585
- 157275 string characters out of 6176525
- 231232 words of memory out of 5000000
+ 157271 string characters out of 6176525
+ 231228 words of memory out of 5000000
  14334 multiletter control sequences out of 15000+600000
  36873 words of font info for 40 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -806,7 +806,7 @@ type1/public/lm/lmtk10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fon
 ts/type1/public/lm/lmtt10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/
 fonts/type1/public/lm/lmtti10.pfb>
 Output written on State-transition-model-dynamics-illustrative-case-study.pdf (
-19 pages, 1357689 bytes).
+19 pages, 1363084 bytes).
 PDF statistics:
  255 PDF objects out of 1000 (max. 8388607)
  202 compressed objects within 3 object streams

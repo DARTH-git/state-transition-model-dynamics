@@ -1,0 +1,200 @@
+---
+title: "Simulation study of efficiency of STM methods"
+subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Yang, A., Jalal HJ.' **A multidimensional array representation of state-transition model** (revised, September 2019)
+author: "Alan Yang, modified by Eline Krijkamp"
+date: "9/26/2019"
+output:
+  html_document: default
+  pdf_document: default
+always_allow_html: yes
+---
+
+**Explanation of the simulation study**
+
+For an explanation see the paper or Markdown document. This file only contains the code for the figures. 
+
+**Compare time:**
+
+2D line graph - by state, at 1320 cycles
+
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
+library(plotly)
+library(ggplot2)
+library(DataCombine)
+library(darthpack)
+library(dampack)
+library(reshape2)
+
+# code for the DARTH colors for the figures
+DARTHyellow <- '#009999'  
+DARTHgreen  <- '#FDAD1E'   
+v_colors <- c(DARTHyellow, DARTHgreen)
+
+number_ticks <- function(n) {function(limits) pretty(limits, n)} #Function for number of ticks in ggplot
+
+time_mem_both <- read.csv('time_memory_comparisons_more_cycles.csv', 
+                     header = TRUE, stringsAsFactors = FALSE)
+
+time_mem_both$method[time_mem_both$method == "cohort trace"] <- "Traditional cohort trace"
+time_mem_both$method[time_mem_both$method == "array"] <- "Dynamics array"
+names(time_mem_both)[names(time_mem_both) == "method"] <- "Approach"
+time_mem_both_2D <- time_mem_both[time_mem_both$n_t == 1320, ]
+
+# Create a graph showing the computational time of both approaches
+ggplot(data = time_mem_both_2D, aes(x = n_states, y = time, group = Approach)) +
+  geom_point(aes(color = Approach, shape = Approach)) +
+  geom_line(aes(color = Approach)) + 
+  ggtitle("Computation time simulation analysis") +
+  xlab("Number of health states") + 
+  ylab("Time (in seconds)") +
+  scale_color_manual(values = c(DARTHyellow, DARTHgreen), name = "Approaches", labels = c("Dynamics array", "Traditional cohort trace")) +
+  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+    theme_bw(base_size = 16) + theme(legend.position = "bottom")
+
+
+ggsave("2D_time.png")
+```
+
+
+**Zoom in on the y-axis**
+
+2D line graph - by state, at 1320 cycles zoomed in on the y-axis to see time changes of the array approach
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
+# Create a graph to zoom in on the y-axis to see the change in time for the array method
+ggplot(data = time_mem_both_2D, aes(x = n_states, y = time, group = Approach)) +
+  geom_point(aes(color = Approach, shape = Approach)) +
+  geom_line(aes(color = Approach)) + 
+  ggtitle("Comparison of computation time") +
+  xlab("Number of health states") + 
+  ylab("Time (in seconds)") +
+   scale_y_continuous(limits = c(0, 2)) + 
+    theme_bw(base_size = 16) +
+    scale_x_continuous(breaks = number_ticks(6)) +
+  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+    theme_bw(base_size = 16) + theme(legend.position = "bottom")
+
+ggsave("2D_time_zoom.png")
+```
+
+
+
+3D Scatter plot:
+
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, include = TRUE}
+time_mem_both <- read.csv('time_memory_comparisons_more_cycles.csv', 
+                     header = TRUE, stringsAsFactors = FALSE)
+
+time_mem_both_3D <- time_mem_both
+
+# insert NAs so the lines are not connected on the graph
+index <- 1:length(seq(from = 110, to = 2860, by = 110))
+j <- 0
+for (i in seq(from = 110, to = 2860, by = 110)) {
+  j <- j + 1
+  time_mem_both_3D <- InsertRow(time_mem_both_3D, rep(NA,5), RowNum = i + index[j])
+}
+
+axy <- list(
+  nticks = 14,
+  range = c(3, 1320)
+)
+
+f1 <- list(
+  family = "Arial, sans-serif",
+  size = 12,
+  color = "black")
+
+f2 <- list(
+  family = "Old Standard TT, serif",
+  size = 11,
+  color = "black")
+
+axis <- list(
+  titlefont = f1,
+  tickfont = f2,
+  showgrid = TRUE
+)
+
+scene = list(
+  xaxis = axis,
+  yaxis = axis,
+  zaxis = axis)
+
+time_mem_trace <- time_mem_both_3D[time_mem_both_3D$method == 'cohort trace', ]
+time_mem_array <- time_mem_both_3D[time_mem_both_3D$method == 'array', ]
+
+p <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$time, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = '#FDAD1E'), connectgaps = FALSE) %>% layout(scene = list(yaxis=axy)) %>%
+layout(scene = list(
+       xaxis = list(title = "Number of health states"),
+       yaxis = list(title = "Number of cycles"),
+       zaxis = list(title = "Time (in seconds)"))) %>% layout(scene=scene)
+
+p %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_mem_array$time, type = 'scatter3d', mode = 'lines', name = 'Dynamics array', line = list(color = '#009999'), connectgaps = FALSE) 
+
+```
+
+
+
+**Compare storage:**
+
+3D Scatter plot:
+
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, include = TRUE}
+p1 <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$memory, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = '#FDAD1E'),  connectgaps = FALSE) %>% layout(scene = list(yaxis = axy)) %>%
+layout(scene = list(
+      xaxis = list(title = "Number of health states"),
+      yaxis = list(title = "Numer of cycles"),
+      zaxis = list(title = "Memory (in MB)"))) %>% layout(scene=scene)
+
+p1 %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_mem_array$memory, type = 'scatter3d', mode = 'lines', name = 'Dynamics array', line = list(color = '#009999'), connectgaps = FALSE) 
+
+```
+
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, out.width = '100%'}
+#knitr::include_graphics("3D_memory.png")
+```
+
+
+2D line graph - by state, at 1320 cycles
+
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
+options(scipen = 999)
+
+ggplot(data = time_mem_both_2D, aes(x = n_states, y = memory/1000000, group = Approach)) +
+  geom_point(aes(color = Approach, shape = Approach)) +
+  geom_line(aes(color = Approach)) +
+  ggtitle("Comparison of computation memory") +
+  xlab("Number of health states") + 
+  ylab("Memory (in MB)") +
+  theme_bw(base_size = 16) +
+    scale_y_continuous(breaks = number_ticks(7)) +
+    scale_x_continuous(breaks = number_ticks(6)) +
+  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+    theme_bw(base_size = 16) + theme(legend.position = "bottom")
+
+ggsave("2D_memory.png")
+```
+
+
+2D combined plots:
+
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
+time_mem_both_2D[, "Time (in seconds)"] <- time_mem_both_2D$time
+time_mem_both_2D[, "Memory (in MB)"] <- time_mem_both_2D$memory/1000000
+time_mem_both_2D_new <- melt(time_mem_both_2D[, ! names(time_mem_both_2D) %in% c("time", "memory")], id.vars = c("Approach", "n_states", "n_t"))
+
+options(scipen = 999)
+
+ggplot(time_mem_both_2D_new, aes(x = n_states, value)) +
+  geom_point(aes(color = Approach, shape = Approach)) + 
+  geom_line(aes(color = Approach)) +
+  scale_y_continuous(breaks = number_ticks(7)) +
+  scale_x_continuous(breaks = number_ticks(6)) +
+  xlab("Number of health states") + 
+  ylab("") +
+  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+  facet_wrap(~ variable, scales ="free_y") +
+  theme_bw(base_size = 16) + theme(legend.position = "bottom")
+
+ggsave("2D_time_memory.png")
+```
