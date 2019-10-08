@@ -1,7 +1,7 @@
 ---
 title: "Simulation study of efficiency of STM methods"
 subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Yang, A., Jalal HJ.' **A multidimensional array representation of state-transition model** (revised, September 2019)
-author: "Alan Yang"
+author: "Alan Yang and Eline Krijkamp"
 date: "9/26/2019"
 output:
   html_document: default
@@ -201,15 +201,15 @@ p %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_me
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
 options(scipen = 999)
-ggplot(data = time_mem_both_2D, aes(x = n_states, y = memory/1000000, group = approach))+  geom_point(aes(color = approach, shape = approach)) +
+ggplot(data = time_mem_both_2D, aes(x = n_states, y = memory/1000000, group = approach))+  
+  geom_point(aes(color = approach, shape = approach)) +
   geom_line(aes(color = approach)) +
   ggtitle("Computation memory of comparison") +
   xlab("Number of health states") + 
   ylab("Memory (in MB)") +
-  theme_bw(base_size = 16) +
     scale_y_continuous(breaks = number_ticks(7)) +
     scale_x_continuous(breaks = number_ticks(6)) +
-  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+    scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
     theme_bw(base_size = 16) + theme(legend.position = "bottom")
   
 ggsave("../figs/2D_memory.png")
