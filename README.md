@@ -9,7 +9,7 @@ In addition to that we provide code showing who to incorporate transition reward
 
 Besides a comparison of the cohort trace approach and the array approach we also performed a sensitivity analysis to see how the number of cycles and the number of health states are influencing the performance of the different appraoched. 
 
-All code is explained in more detail in the markdown PDF [link] (https://github.com/DARTH-git/state-transition-model-dynamics/blob/master/markdown/State-transition-model-dynamics-illustrative-case-study.pdf).
+All code is explained in more detail in the markdown PDF [link](https://github.com/DARTH-git/state-transition-model-dynamics/blob/master/markdown/State-transition-model-dynamics-illustrative-case-study.pdf).
 
 ## Full list of Contributors:
 
