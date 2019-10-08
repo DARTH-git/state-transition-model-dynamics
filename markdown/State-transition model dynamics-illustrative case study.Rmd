@@ -491,7 +491,7 @@ In Figure \ref{fig:2D-time-zoom}, we zoom in on the y-axis to see the changes in
 
 Figure \ref{fig:3D-time} illustrates how computation time of the two approaches vary as the number of health states and the number of cycles increase simultaneously. The figure shows that the run time of the cohort trace approach increases when either the number of health states or the number of cycles increases. On the contrary, the run time of the array approach is significantly less and is invariant to increases in either the number of health states nor the number of cycles. 
 
-![An three-dimensional illustration of how computation time (y-axis) of the two approaches vary as the number of states, $n_{states}$ (x-axis),  and the number of cycles, $n_t$ (z-axis), increase simultaneously. \label{fig:3D-time}](../figs/3D_time.png)
+![An three-dimensional illustration of how computation time (y-axis) of the two approaches vary as the number of states, `n_states` (x-axis),  and the number of cycles, `n_t` (z-axis), increase simultaneously. \label{fig:3D-time}](../figs/3D_time.png)
 
 
 At 1320 cycles, as the number of health states increases, the storage of both approaches increases (see right panel Figure \ref{fig:2D-time-memory}. When the number of health states is less than approximately 52, the cohort trace approach takes up less storage. But when the number of health states is above approximately 52, it takes up more storage. 
@@ -500,7 +500,7 @@ At 1320 cycles, as the number of health states increases, the storage of both ap
 Figure \ref{fig:3D-memory} illustrates how computation storage of the two approaches vary as the number of health states and the number of cycles increase simultaneously. We see that the storage increases as when either the number of health states or the number of cycles increases. Both approaches take up approximately the same amount of storage before around 50 health states. After 50 health states the cohort trace approach takes up more memory compared to the array approach.
 
 
-![An three-dimensional illustration of how computation memory in bytes (y-axis) of the two approaches vary as the number of states, $n_{states}$ (x-axis),  and the number of cycles, $n_t$ (z-axis), increase simultaneously. \label{fig:3D-memory}](../figs/3D_memory.png)
+![An three-dimensional illustration of how computation memory in bytes (y-axis) of the two approaches vary as the number of states, `n_states` (x-axis),  and the number of cycles, `n_t` (z-axis), increase simultaneously. \label{fig:3D-memory}](../figs/3D_memory.png)
 
 Based on the results of our sensitivity analysis, we conclude that the array approach is computationally superior to the cohort trace approach. It is much faster and does not run any slower when the number of cycles or the number of health states increases. In addition, it takes up less storage as the number of states becomes sufficiently large. 
 
