@@ -13,4 +13,4 @@ bash: syntax error near unexpected token `a.A[,'
 [KMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ ggplot(data = time_mem_both_2D, aes(x = n_states, y = memory/1000000, group = method)) + geom_line(aes(color = method)) +
 ]0;~/Dropbox (Persoonlijk)/03_Onderzoek/DARTH/state-transition-model-dynamics[?1034hMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ ggplot(data = time_mem_both_2D, aes(x = n_ states, y = memory/1000000, group = method)) + geom_line(aes(color = method)) +
 bash: syntax error near unexpected token `data'
-[KMacBook-Pro-van-Eline:state-transition-model-dynamics elinekrijkamp$ 
+[Kmbp-van-eline:state-transition-model-dynamics elinekrijkamp$ 
