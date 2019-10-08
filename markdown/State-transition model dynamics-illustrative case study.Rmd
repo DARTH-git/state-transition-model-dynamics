@@ -1,12 +1,13 @@
 ---
-title: "Illustrative healthy-sick-dead 3-state model"
+title: "Supplementary Material of 'A multidimensional Array Representation of State-Transition Model Dynamics'" 
+author: "Krijkamp EM^, Alarid-Escudero F^, Enns EA, Hunink MGM, Pechlivanoglou P, Yang, A, Jalal HJ."
 output:
   pdf_document: default
   html_document:
     df_print: paged
   word_document: default
 date: "`r Sys.Date()`"
-subtitle: Appendix of 'Krijkamp EM, Alarid-Escudero F, Enns EA, Hunink MGM, Pechlivanoglou P, Yang, A., Jalal HJ.' **A multidimensional array representation of state-transition model dynamics.** (revised, September 2019)
+subtitle: "^ Contributed equally"
 ---
 
 ```{r setup, include=FALSE}
