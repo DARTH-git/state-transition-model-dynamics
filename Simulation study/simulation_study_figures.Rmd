@@ -26,13 +26,15 @@ library(dampack)
 library(reshape2)
 
 # code for the DARTH colors for the figures
-DARTHyellow <- '#009999'  
-DARTHgreen  <- '#FDAD1E'   
-v_colors <- c(DARTHyellow, DARTHgreen)
+DARTHgreen      <- '#009999'  
+DARTHyellow     <- '#FDAD1E'  
+DARTHblue       <- '#006699' 
+DARTHlightgreen <- '#00adad'
+DARTHgray       <- '#666666'
 
 number_ticks <- function(n) {function(limits) pretty(limits, n)} #Function for number of ticks in ggplot
 
-time_mem_both <- read.csv('time_memory_comparisons_more_cycles.csv', 
+time_mem_both <- read.csv('time_memory_comparisions_avg_10sets.csv', 
                      header = TRUE, stringsAsFactors = FALSE)
 
 time_mem_both$method[time_mem_both$method == "cohort trace"] <- "Traditional cohort trace"
@@ -47,12 +49,12 @@ ggplot(data = time_mem_both_2D, aes(x = n_states, y = time, group = Approach)) +
   ggtitle("Computation time simulation analysis") +
   xlab("Number of health states") + 
   ylab("Time (in seconds)") +
-  scale_color_manual(values = c(DARTHyellow, DARTHgreen), name = "Approaches", labels = c("Dynamics array", "Traditional cohort trace")) +
-  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+  scale_color_manual(values = c(DARTHyellow, DARTHblue), name = "Approaches", labels = c("Dynamics array", "Traditional cohort trace")) +
+  scale_color_manual(values = c(DARTHyellow, DARTHblue)) +
     theme_bw(base_size = 16) + theme(legend.position = "bottom")
 
 
-ggsave("2D_time.png")
+ggsave("../figs/2D_time.png")
 ```
 
 
@@ -64,16 +66,16 @@ ggsave("2D_time.png")
 ggplot(data = time_mem_both_2D, aes(x = n_states, y = time, group = Approach)) +
   geom_point(aes(color = Approach, shape = Approach)) +
   geom_line(aes(color = Approach)) + 
-  ggtitle("Comparison of computation time") +
+  ggtitle("Comparison of computation time (short y-axis)") +
   xlab("Number of health states") + 
   ylab("Time (in seconds)") +
    scale_y_continuous(limits = c(0, 2)) + 
     theme_bw(base_size = 16) +
     scale_x_continuous(breaks = number_ticks(6)) +
-  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+  scale_color_manual(values = c(DARTHyellow, DARTHblue)) +
     theme_bw(base_size = 16) + theme(legend.position = "bottom")
 
-ggsave("2D_time_zoom.png")
+ggsave("../figs/2D_time_zoom.png")
 ```
 
 
@@ -81,7 +83,7 @@ ggsave("2D_time_zoom.png")
 **3D Scatter plot:**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, include = TRUE}
-time_mem_both <- read.csv('time_memory_comparisons_more_cycles.csv', 
+time_mem_both <- read.csv('time_memory_comparisions_avg_10sets.csv', 
                      header = TRUE, stringsAsFactors = FALSE)
 
 time_mem_both_3D <- time_mem_both
@@ -123,13 +125,13 @@ scene = list(
 time_mem_trace <- time_mem_both_3D[time_mem_both_3D$method == 'cohort trace', ]
 time_mem_array <- time_mem_both_3D[time_mem_both_3D$method == 'array', ]
 
-p <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$time, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = '#FDAD1E'), connectgaps = FALSE) %>% layout(scene = list(yaxis=axy)) %>%
+p <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$time, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = DARTHblue), connectgaps = FALSE) %>% layout(scene = list(yaxis=axy)) %>%
 layout(scene = list(
        xaxis = list(title = "Number of health states"),
        yaxis = list(title = "Number of cycles"),
        zaxis = list(title = "Time (in seconds)"))) %>% layout(scene=scene)
 
-p %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_mem_array$time, type = 'scatter3d', mode = 'lines', name = 'Dynamics array', line = list(color = '#009999'), connectgaps = FALSE) 
+p %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_mem_array$time, type = 'scatter3d', mode = 'lines', name = 'Dynamics array', line = list(color = DARTHyellow), connectgaps = FALSE) 
 
 ```
 
@@ -140,13 +142,13 @@ p %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_me
 **3D Scatter plot:**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, include = TRUE}
-p1 <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$memory, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = '#FDAD1E'),  connectgaps = FALSE) %>% layout(scene = list(yaxis = axy)) %>%
+p1 <- plot_ly(x = time_mem_trace$n_states, y = time_mem_trace$n_t, z = time_mem_trace$memory, type = 'scatter3d', mode = 'lines', name = 'Traditional cohort trace', line = list(color = DARTHblue),  connectgaps = FALSE) %>% layout(scene = list(yaxis = axy)) %>%
 layout(scene = list(
       xaxis = list(title = "Number of health states"),
       yaxis = list(title = "Numer of cycles"),
       zaxis = list(title = "Memory (in MB)"))) %>% layout(scene=scene)
 
-p1 %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_mem_array$memory, type = 'scatter3d', mode = 'lines', name = 'Dynamics array', line = list(color = '#009999'), connectgaps = FALSE) 
+p1 %>% add_trace(x = time_mem_array$n_states, y = time_mem_array$n_t, z = time_mem_array$memory, type = 'scatter3d', mode = 'lines', name = 'Dynamics array', line = list(color = DARTHyellow), connectgaps = FALSE) 
 
 ```
 
@@ -170,7 +172,7 @@ To save these figures we performed the following steps manually:
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, out.width = '100%'}
 # After saving the figure you can import it in the markdow
-#knitr::include_graphics("3D_memory.png")
+knitr::include_graphics("../figs/3D_memory.png")
 ```
 
 
@@ -188,19 +190,21 @@ ggplot(data = time_mem_both_2D, aes(x = n_states, y = memory/1000000, group = Ap
   theme_bw(base_size = 16) +
     scale_y_continuous(breaks = number_ticks(7)) +
     scale_x_continuous(breaks = number_ticks(6)) +
-  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
-    theme_bw(base_size = 16) + theme(legend.position = "bottom")
+  scale_color_manual(values = c(DARTHyellow, DARTHblue)) +
+    theme_bw(base_size = 16) + 
+    theme(legend.position = "bottom")
 
-ggsave("2D_memory.png")
+ggsave("../figs/2D_memory.png")
 ```
 
 
 **2D combined plots:**
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
-time_mem_both_2D[, "Time (in seconds)"] <- time_mem_both_2D$time
-time_mem_both_2D[, "Memory (in MB)"] <- time_mem_both_2D$memory/1000000
-time_mem_both_2D_new <- melt(time_mem_both_2D[, ! names(time_mem_both_2D) %in% c("time", "memory")], id.vars = c("Approach", "n_states", "n_t"))
+time_mem_both_2D_new <- time_mem_both_2D
+time_mem_both_2D_new[, "Time (in seconds)"] <- time_mem_both_2D$time
+time_mem_both_2D_new[, "Memory (in MB)"] <- time_mem_both_2D$memory/1000000
+time_mem_both_2D_new <- melt(time_mem_both_2D_new[, ! names(time_mem_both_2D_new) %in% c("time", "memory")], id.vars = c("Approach", "n_states", "n_t"))
 
 options(scipen = 999)
 
@@ -211,9 +215,66 @@ ggplot(time_mem_both_2D_new, aes(x = n_states, value)) +
   scale_x_continuous(breaks = number_ticks(6)) +
   xlab("Number of health states") + 
   ylab("") +
-  scale_color_manual(values = c(DARTHyellow, DARTHgreen)) +
+  scale_color_manual(values = c(DARTHyellow, DARTHblue)) +
   facet_wrap(~ variable, scales ="free_y") +
-  theme_bw(base_size = 16) + theme(legend.position = "bottom")
+  theme_bw(base_size = 16) + 
+  theme(legend.position = "bottom") +
+  theme(strip.background = element_rect(fill = DARTHgreen)) +
+  theme(strip.text = element_text(color = 'white'))
 
-ggsave("2D_time_memory.png")
+ggsave("../figs/2D_time_memory.png")
 ```
+
+
+
+
+```{r, echo = FALSE, eval = FALSE, warning = FALSE, cache = TRUE, message = FALSE}
+# Uncomment if we like to have the graphs relative 
+**2D combined plots with time and memory relative to the other:**
+
+
+data3 <- time_mem_both_2D
+data_cohort <- data3[time_mem_both_2D$Approach == "Traditional cohort trace", ]
+data_array  <- data3[time_mem_both_2D$Approach == "Dynamics array", ]
+data_relative <- data_cohort
+data_relative$Approach <- "Comparison cohort vs. array"
+data_relative$time <- data_cohort$time / data_array$time
+data_relative$memory <- data_cohort$memory / data_array$memory
+head(data_relative)
+
+data_relative_new <- melt(data_relative[, ! names(data_relative) %in% c("n_states", "memory")], id.vars = c("Approach", "time", "memory"))
+
+options(scipen = 999)
+
+ggplot(data_relative, aes(x = n_states, time)) +
+  geom_point(color = DARTHgreen) + 
+  geom_line(color = DARTHgreen) +
+  ggtitle("Relative computation time")+
+  scale_y_continuous(breaks = number_ticks(7)) +
+  scale_x_continuous(breaks = number_ticks(6)) +
+  xlab("Number of health states") + 
+  ylab("time cohort : time array") + #\u0394 is the unicode for Delta
+      theme_bw(base_size = 16) + 
+      theme(legend.position = "bottom")
+
+
+
+
+ggplot(data_relative, aes(x = n_states, memory)) +
+  geom_point(color = DARTHgreen) + 
+  geom_line(color = DARTHgreen) +
+  geom_hline(aes(yintercept = 1), color = DARTHgray) +
+  ggtitle("Relative computation memory")+
+  scale_y_continuous(breaks = number_ticks(7)) +
+  scale_x_continuous(breaks = number_ticks(6)) +
+  xlab("Number of health states") + 
+  ylab("memory cohort : memory array") + #\u0394 is the unicode for Delta
+      theme_bw(base_size = 16) + 
+      theme(legend.position = "bottom")
+
+
+#ggsave("../figs/2D_time_memory.png")
+```
+
+
+
