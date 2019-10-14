@@ -172,7 +172,7 @@ To save these figures we performed the following steps manually:
 
 ```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE, out.width = '100%'}
 # After saving the figure you can import it in the markdow
-knitr::include_graphics("../figs/3D_memory.png")
+#knitr::include_graphics("../figs/3D_memory.png")
 ```
 
 
@@ -230,9 +230,8 @@ ggsave("../figs/2D_time_memory.png")
 
 ```{r, echo = FALSE, eval = FALSE, warning = FALSE, cache = TRUE, message = FALSE}
 # Uncomment if we like to have the graphs relative 
+# This is extra code to try to make the figures
 **2D combined plots with time and memory relative to the other:**
-
-
 data3 <- time_mem_both_2D
 data_cohort <- data3[time_mem_both_2D$Approach == "Traditional cohort trace", ]
 data_array  <- data3[time_mem_both_2D$Approach == "Dynamics array", ]
@@ -242,25 +241,26 @@ data_relative$time <- data_cohort$time / data_array$time
 data_relative$memory <- data_cohort$memory / data_array$memory
 head(data_relative)
 
-data_relative_new <- melt(data_relative[, ! names(data_relative) %in% c("n_states", "memory")], id.vars = c("Approach", "time", "memory"))
+data_relative_combined <- melt(data_relative, id.vars = c("Approach", "n_states", "n_t"))
+
 
 options(scipen = 999)
 
-ggplot(data_relative, aes(x = n_states, time)) +
+ggplot(data_relative_combined, aes(x = n_states, time)) +
   geom_point(color = DARTHgreen) + 
   geom_line(color = DARTHgreen) +
-  ggtitle("Relative computation time")+
+  ggtitle("Relative computation time") +
   scale_y_continuous(breaks = number_ticks(7)) +
   scale_x_continuous(breaks = number_ticks(6)) +
   xlab("Number of health states") + 
-  ylab("Relative speedup: dynamic / traditional") + #\u0394 is the unicode for Delta
+  ylab("Relative speedup: dynamic / traditional") +
       theme_bw(base_size = 16) + 
       theme(legend.position = "bottom")
 
 #ggsave("../figs/2D_time_relative.png")
 
 
-ggplot(data_relative, aes(x = n_states, memory)) +
+ggplot(data_relative_combined, aes(x = n_states, temory)) +
   geom_point(color = DARTHgreen) + 
   geom_line(color = DARTHgreen) +
   geom_hline(aes(yintercept = 1), color = DARTHgray) +
@@ -276,8 +276,40 @@ ggplot(data_relative, aes(x = n_states, memory)) +
 #ggsave("../figs/2D_memory_relative.png")
 
 
-head(time_mem_both_2D_new)
+# Use the facet_wrap to make a figure
+ggplot(data_relative_combined, aes(x = n_states, value), group = variable) +
+  geom_point(color = DARTHgreen) + 
+  geom_line(color = DARTHgreen) +
+  scale_y_continuous(breaks = number_ticks(7)) +
+  scale_x_continuous(breaks = number_ticks(6)) +
+  xlab("Number of health states") + 
+  ylab("Relative: dynamic / traditional") +  
+  facet_wrap(~ variable, scales ="free_y") + 
+    geom_hline(aes(yintercept = 1), color = DARTHgray) +
+      theme_bw(base_size = 16) + 
+      theme(legend.position = "bottom") +
+      theme(strip.background = element_rect(fill = DARTHgreen)) +
+      theme(strip.text = element_text(color = 'white'))
 
+data_combined <- rbind(time_mem_both_2D_new, data_relative_combined)
+# Use the facet_wrap to make a figure
+
+ggplot(data_combined, aes(x = n_states, value), group = variable) +
+  geom_point(aes(color = Approach, shape = Approach)) +
+  geom_line(aes(color = Approach)) + 
+  scale_y_continuous(breaks = number_ticks(7)) +
+  scale_x_continuous(breaks = number_ticks(6)) +
+  xlab("Number of health states") + 
+  ylab("Relative: dynamic / traditional") +  
+  facet_wrap(~ variable, scales ="free_y", nrow = 2, 
+             labeller = as_labeller(c)) + 
+      theme_bw(base_size = 16) + 
+      theme(legend.position = "bottom", legend.title = element_blank()) +
+      theme(strip.background = element_rect(fill = DARTHgreen)) +
+      theme(strip.text = element_text(color = 'white')) +
+      scale_color_manual(values = c(DARTHgreen, DARTHyellow, DARTHblue))
+
+ggsave("../figs/time_memory_comparison.png")
 ```
 
 

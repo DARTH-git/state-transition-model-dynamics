@@ -362,7 +362,7 @@ With the traditional approach the Markov trace is calculated every cycle. This t
 
 ![State-transition diagram of the 3-state model when using the cohort trace approach. The dashed lines around the temporary health states indicate that the individuals can only stay in that health state for one cycle. \label{fig:STM-cohort}](../figs/STM_diagram_cohort_approach.png)
 
-In the next sections we describe how to run the model using the traditional cohort trace approach. All parameters are similar we and only provide code for parts that are different compared to the dynamics array approach 
+In the next sections we describe how to run the model using the traditional cohort trace approach. All parameters are similar we and only provide code for parts that are different compared to the dynamics-array approach 
 
 ### Extra temporary health states
 
