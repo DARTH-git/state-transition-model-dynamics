@@ -253,11 +253,11 @@ ggplot(data_relative, aes(x = n_states, time)) +
   scale_y_continuous(breaks = number_ticks(7)) +
   scale_x_continuous(breaks = number_ticks(6)) +
   xlab("Number of health states") + 
-  ylab("time cohort : time array") + #\u0394 is the unicode for Delta
+  ylab("Relative speedup: dynamic / traditional") + #\u0394 is the unicode for Delta
       theme_bw(base_size = 16) + 
       theme(legend.position = "bottom")
 
-
+#ggsave("../figs/2D_time_relative.png")
 
 
 ggplot(data_relative, aes(x = n_states, memory)) +
@@ -268,12 +268,16 @@ ggplot(data_relative, aes(x = n_states, memory)) +
   scale_y_continuous(breaks = number_ticks(7)) +
   scale_x_continuous(breaks = number_ticks(6)) +
   xlab("Number of health states") + 
-  ylab("memory cohort : memory array") + #\u0394 is the unicode for Delta
+  ylab("Relative memory usage: dynamic / traditional") + #\u0394 is the unicode for Delta
       theme_bw(base_size = 16) + 
       theme(legend.position = "bottom")
 
 
-#ggsave("../figs/2D_time_memory.png")
+#ggsave("../figs/2D_memory_relative.png")
+
+
+head(time_mem_both_2D_new)
+
 ```
 
 

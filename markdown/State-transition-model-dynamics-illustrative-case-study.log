@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.12)  14 OCT 2019 19:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2019.6.12)  14 OCT 2019 19:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -751,40 +751,40 @@ Package pdftex.def Info: ../figs/STM_diagram_cohort_approach.png  used on input
 <../figs/2D_time_memory.png, id=164, 2106.87125pt x 1504.62125pt>
 File: ../figs/2D_time_memory.png Graphic file (type png)
 <use ../figs/2D_time_memory.png>
-Package pdftex.def Info: ../figs/2D_time_memory.png  used on input line 994.
+Package pdftex.def Info: ../figs/2D_time_memory.png  used on input line 999.
 (pdftex.def)             Requested size: 469.74986pt x 335.47168pt.
 <../figs/2D_time_zoom.png, id=166, 2195.20125pt x 1356.06625pt>
 File: ../figs/2D_time_zoom.png Graphic file (type png)
 <use ../figs/2D_time_zoom.png>
-Package pdftex.def Info: ../figs/2D_time_zoom.png  used on input line 1004.
+Package pdftex.def Info: ../figs/2D_time_zoom.png  used on input line 1009.
 (pdftex.def)             Requested size: 469.74834pt x 290.18289pt.
-[15 <../figs/2D_time_memory.png>] [16 <../figs/2D_time_zoom.png>]
-<../figs/3D_time.png, id=181, 711.6186pt x 468.3096pt>
+<../figs/3D_time.png, id=168, 711.6186pt x 468.3096pt>
 File: ../figs/3D_time.png Graphic file (type png)
 <use ../figs/3D_time.png>
-Package pdftex.def Info: ../figs/3D_time.png  used on input line 1021.
+Package pdftex.def Info: ../figs/3D_time.png  used on input line 1026.
 (pdftex.def)             Requested size: 469.76746pt x 309.1496pt.
-<../figs/3D_memory.png, id=184, 711.6186pt x 468.3096pt>
+<../figs/3D_memory.png, id=171, 711.6186pt x 468.3096pt>
 File: ../figs/3D_memory.png Graphic file (type png)
 <use ../figs/3D_memory.png>
-Package pdftex.def Info: ../figs/3D_memory.png  used on input line 1046.
+Package pdftex.def Info: ../figs/3D_memory.png  used on input line 1051.
 (pdftex.def)             Requested size: 469.76746pt x 309.1496pt.
-[17 <../figs/3D_time.png>] [18 <../figs/3D_memory.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1068.
-[19]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1068.
+[15] [16 <../figs/2D_time_memory.png>] [17 <../figs/2D_time_zoom.png>] [18 <../
+figs/3D_time.png>] [19 <../figs/3D_memory.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1073.
+[20]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1073.
 (./State-transition-model-dynamics-illustrative-case-study.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1068.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1068.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1073.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1073.
 
 Package rerunfilecheck Info: File `State-transition-model-dynamics-illustrative
 -case-study.out' has not changed.
 (rerunfilecheck)             Checksum: 5B082F03ED33A9FDC161471C2B2A1244;2645.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1068.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1073.
  ) 
 Here is how much of TeX's memory you used:
- 10889 strings out of 494585
- 157271 string characters out of 6176525
+ 10890 strings out of 494585
+ 157278 string characters out of 6176525
  230228 words of memory out of 5000000
  14334 multiletter control sequences out of 15000+600000
  36873 words of font info for 40 fonts, out of 8000000 for 9000
@@ -805,10 +805,10 @@ type1/public/lm/lmtk10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/fon
 ts/type1/public/lm/lmtt10.pfb></Users/elinekrijkamp/Library/TinyTeX/texmf-dist/
 fonts/type1/public/lm/lmtti10.pfb>
 Output written on State-transition-model-dynamics-illustrative-case-study.pdf (
-19 pages, 1181845 bytes).
+20 pages, 1182433 bytes).
 PDF statistics:
- 255 PDF objects out of 1000 (max. 8388607)
- 202 compressed objects within 3 object streams
- 52 named destinations out of 1000 (max. 500000)
+ 259 PDF objects out of 1000 (max. 8388607)
+ 205 compressed objects within 3 object streams
+ 53 named destinations out of 1000 (max. 500000)
  137 words of extra memory for PDF output out of 10000 (max. 10000000)
 
