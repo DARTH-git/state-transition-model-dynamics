@@ -231,12 +231,12 @@ ggsave("../figs/2D_time_memory.png")
 ```{r, echo = FALSE, eval = FALSE, warning = FALSE, cache = TRUE, message = FALSE}
 # Uncomment if we like to have the graphs relative 
 # This is extra code to try to make the figures
-**2D combined plots with time and memory relative to the other:**
+#**2D combined plots with time and memory relative to the other:**
 data3 <- time_mem_both_2D
 data_cohort <- data3[time_mem_both_2D$Approach == "Traditional cohort trace", ]
 data_array  <- data3[time_mem_both_2D$Approach == "Dynamics array", ]
 data_relative <- data_cohort
-data_relative$Approach <- "Comparison cohort vs. array"
+data_relative$Approach <- "Approach comparison"
 data_relative$time <- data_cohort$time / data_array$time
 data_relative$memory <- data_cohort$memory / data_array$memory
 head(data_relative)
@@ -246,7 +246,7 @@ data_relative_combined <- melt(data_relative, id.vars = c("Approach", "n_states"
 
 options(scipen = 999)
 
-ggplot(data_relative_combined, aes(x = n_states, time)) +
+ggplot(data_relative, aes(x = n_states, time)) +
   geom_point(color = DARTHgreen) + 
   geom_line(color = DARTHgreen) +
   ggtitle("Relative computation time") +
@@ -260,7 +260,7 @@ ggplot(data_relative_combined, aes(x = n_states, time)) +
 #ggsave("../figs/2D_time_relative.png")
 
 
-ggplot(data_relative_combined, aes(x = n_states, temory)) +
+ggplot(data_relative, aes(x = n_states, memory)) +
   geom_point(color = DARTHgreen) + 
   geom_line(color = DARTHgreen) +
   geom_hline(aes(yintercept = 1), color = DARTHgray) +
