@@ -1,0 +1,79 @@
+"","Approach","n_states","n_t","variable","value"
+"1","Traditional cohort trace",2,1320,"Time (in seconds)",0.00400000000045111
+"2","Traditional cohort trace",7,1320,"Time (in seconds)",0.0120000000009895
+"3","Traditional cohort trace",12,1320,"Time (in seconds)",0.0589999999987924
+"4","Traditional cohort trace",17,1320,"Time (in seconds)",0.239000000001079
+"5","Traditional cohort trace",22,1320,"Time (in seconds)",0.673999999997796
+"6","Traditional cohort trace",27,1320,"Time (in seconds)",1.61299999999908
+"7","Traditional cohort trace",32,1320,"Time (in seconds)",3.11900000000062
+"8","Traditional cohort trace",37,1320,"Time (in seconds)",5.78799999999771
+"9","Traditional cohort trace",42,1320,"Time (in seconds)",9.45700000000233
+"10","Traditional cohort trace",47,1320,"Time (in seconds)",15.0520000000024
+"11","Traditional cohort trace",52,1320,"Time (in seconds)",22.2480000000024
+"12","Traditional cohort trace",57,1320,"Time (in seconds)",32.3210000000019
+"13","Traditional cohort trace",62,1320,"Time (in seconds)",46.1800000000047
+"14","Dynamics array",2,1320,"Time (in seconds)",0.00899999999924148
+"15","Dynamics array",7,1320,"Time (in seconds)",0.0150000000008276
+"16","Dynamics array",12,1320,"Time (in seconds)",0.0170000000034236
+"17","Dynamics array",17,1320,"Time (in seconds)",0.0299999999985914
+"18","Dynamics array",22,1320,"Time (in seconds)",0.0419999999988022
+"19","Dynamics array",27,1320,"Time (in seconds)",0.0660000000016794
+"20","Dynamics array",32,1320,"Time (in seconds)",0.0889999999967358
+"21","Dynamics array",37,1320,"Time (in seconds)",0.124999999998249
+"22","Dynamics array",42,1320,"Time (in seconds)",0.150000000002274
+"23","Dynamics array",47,1320,"Time (in seconds)",0.193000000001029
+"24","Dynamics array",52,1320,"Time (in seconds)",0.223999999999705
+"25","Dynamics array",57,1320,"Time (in seconds)",0.27699999999968
+"26","Dynamics array",62,1320,"Time (in seconds)",0.343999999999141
+"27","Traditional cohort trace",2,1320,"Memory (in MB)",0.043408
+"28","Traditional cohort trace",7,1320,"Memory (in MB)",0.538768
+"29","Traditional cohort trace",12,1320,"Memory (in MB)",1.690928
+"30","Traditional cohort trace",17,1320,"Memory (in MB)",3.727888
+"31","Traditional cohort trace",22,1320,"Memory (in MB)",6.997648
+"32","Traditional cohort trace",27,1320,"Memory (in MB)",11.968208
+"33","Traditional cohort trace",32,1320,"Memory (in MB)",19.227568
+"34","Traditional cohort trace",37,1320,"Memory (in MB)",29.483728
+"35","Traditional cohort trace",42,1320,"Memory (in MB)",43.564688
+"36","Traditional cohort trace",47,1320,"Memory (in MB)",62.418448
+"37","Traditional cohort trace",52,1320,"Memory (in MB)",87.113008
+"38","Traditional cohort trace",57,1320,"Memory (in MB)",118.836368
+"39","Traditional cohort trace",62,1320,"Memory (in MB)",158.896528
+"40","Dynamics array",2,1320,"Memory (in MB)",0.149696
+"41","Dynamics array",7,1320,"Memory (in MB)",1.630296
+"42","Dynamics array",12,1320,"Memory (in MB)",4.697296
+"43","Dynamics array",17,1320,"Memory (in MB)",9.350696
+"44","Dynamics array",22,1320,"Memory (in MB)",15.590496
+"45","Dynamics array",27,1320,"Memory (in MB)",23.416696
+"46","Dynamics array",32,1320,"Memory (in MB)",32.829296
+"47","Dynamics array",37,1320,"Memory (in MB)",43.828296
+"48","Dynamics array",42,1320,"Memory (in MB)",56.413696
+"49","Dynamics array",47,1320,"Memory (in MB)",70.585496
+"50","Dynamics array",52,1320,"Memory (in MB)",86.343696
+"51","Dynamics array",57,1320,"Memory (in MB)",103.688296
+"52","Dynamics array",62,1320,"Memory (in MB)",122.619296
+"53","Approach comparison",2,1320,"Relative time: dynamic / traditional",0.444444444532026
+"54","Approach comparison",7,1320,"Relative time: dynamic / traditional",0.800000000021828
+"55","Approach comparison",12,1320,"Relative time: dynamic / traditional",3.47058823452415
+"56","Approach comparison",17,1320,"Relative time: dynamic / traditional",7.96666666707669
+"57","Approach comparison",22,1320,"Relative time: dynamic / traditional",16.0476190480242
+"58","Approach comparison",27,1320,"Relative time: dynamic / traditional",24.4393939387581
+"59","Approach comparison",32,1320,"Relative time: dynamic / traditional",35.044943821517
+"60","Approach comparison",37,1320,"Relative time: dynamic / traditional",46.3040000006303
+"61","Approach comparison",42,1320,"Relative time: dynamic / traditional",63.0466666657264
+"62","Approach comparison",47,1320,"Relative time: dynamic / traditional",77.9896373052961
+"63","Approach comparison",52,1320,"Relative time: dynamic / traditional",99.3214285715701
+"64","Approach comparison",57,1320,"Relative time: dynamic / traditional",116.682310469456
+"65","Approach comparison",62,1320,"Relative time: dynamic / traditional",134.244186046861
+"66","Approach comparison",2,1320,"Relative memory: dynamic / traditional",0.289974348011971
+"67","Approach comparison",7,1320,"Relative memory: dynamic / traditional",0.330472503152802
+"68","Approach comparison",12,1320,"Relative memory: dynamic / traditional",0.359979017715724
+"69","Approach comparison",17,1320,"Relative memory: dynamic / traditional",0.398674922166222
+"70","Approach comparison",22,1320,"Relative memory: dynamic / traditional",0.448840627007633
+"71","Approach comparison",27,1320,"Relative memory: dynamic / traditional",0.511097210298156
+"72","Approach comparison",32,1320,"Relative memory: dynamic / traditional",0.585683226347589
+"73","Approach comparison",37,1320,"Relative memory: dynamic / traditional",0.672709885869165
+"74","Approach comparison",42,1320,"Relative memory: dynamic / traditional",0.772236018714321
+"75","Approach comparison",47,1320,"Relative memory: dynamic / traditional",0.884295663233705
+"76","Approach comparison",52,1320,"Relative memory: dynamic / traditional",1.0089098803461
+"77","Approach comparison",57,1320,"Relative memory: dynamic / traditional",1.14609239985967
+"78","Approach comparison",62,1320,"Relative memory: dynamic / traditional",1.29585255488663

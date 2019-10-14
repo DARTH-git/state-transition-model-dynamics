@@ -239,9 +239,6 @@ data_relative <- data_cohort
 data_relative$Approach <- "Approach comparison"
 data_relative$time <- data_cohort$time / data_array$time
 data_relative$memory <- data_cohort$memory / data_array$memory
-head(data_relative)
-
-data_relative_combined <- melt(data_relative, id.vars = c("Approach", "n_states", "n_t"))
 
 
 options(scipen = 999)
@@ -273,6 +270,8 @@ ggplot(data_relative, aes(x = n_states, memory)) +
       theme(legend.position = "bottom")
 
 
+data_relative_combined <- melt(data_relative, id.vars = c("Approach", "n_states", "n_t"))
+
 #ggsave("../figs/2D_memory_relative.png")
 
 
@@ -291,8 +290,13 @@ ggplot(data_relative_combined, aes(x = n_states, value), group = variable) +
       theme(strip.background = element_rect(fill = DARTHgreen)) +
       theme(strip.text = element_text(color = 'white'))
 
-data_combined <- rbind(time_mem_both_2D_new, data_relative_combined)
-# Use the facet_wrap to make a figure
+names(data_relative)[names(data_relative) == "time"] <- "Relative time: dynamic/traditional"
+names(data_relative)[names(data_relative) == "memory"] <- "Relative memory: dynamic/traditional"
+
+data_relative_combined_new_names <- melt(data_relative, id.vars = c("Approach", "n_states", "n_t"))
+
+
+data_combined <- rbind(time_mem_both_2D_new, data_relative_combined_new_names)
 
 ggplot(data_combined, aes(x = n_states, value), group = variable) +
   geom_point(aes(color = Approach, shape = Approach)) +
@@ -300,7 +304,7 @@ ggplot(data_combined, aes(x = n_states, value), group = variable) +
   scale_y_continuous(breaks = number_ticks(7)) +
   scale_x_continuous(breaks = number_ticks(6)) +
   xlab("Number of health states") + 
-  ylab("Relative: dynamic / traditional") +  
+  ylab(element_blank()) +  
   facet_wrap(~ variable, scales ="free_y", nrow = 2, 
              labeller = as_labeller(c)) + 
       theme_bw(base_size = 16) + 
