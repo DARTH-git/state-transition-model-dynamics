@@ -227,76 +227,19 @@ ggsave("../figs/2D_time_memory.png")
 
 
 
+```{r, echo = FALSE, eval = TRUE, warning = FALSE, cache = TRUE, message = FALSE}
+data_combined <- read.csv("data_combined.csv")
 
-```{r, echo = FALSE, eval = FALSE, warning = FALSE, cache = TRUE, message = FALSE}
-# Uncomment if we like to have the graphs relative 
-# This is extra code to try to make the figures
-#**2D combined plots with time and memory relative to the other:**
-data3 <- time_mem_both_2D
-data_cohort <- data3[time_mem_both_2D$Approach == "Traditional cohort trace", ]
-data_array  <- data3[time_mem_both_2D$Approach == "Dynamics array", ]
-data_relative <- data_cohort
-data_relative$Approach <- "Approach comparison"
-data_relative$time <- data_cohort$time / data_array$time
-data_relative$memory <- data_cohort$memory / data_array$memory
+data_combined$value[data_combined$variable == "Relative memory: dynamic / traditional"] <- 
+  1 / data_combined$value[data_combined$variable == "Relative memory: dynamic / traditional"]
+levels(data_combined$variable)[levels(data_combined$variable) == "Relative time: dynamic / traditional"] <- 
+  "Relative speedup: dynamic / traditional"
+levels(data_combined$Approach)
 
-
-options(scipen = 999)
-
-ggplot(data_relative, aes(x = n_states, time)) +
-  geom_point(color = DARTHgreen) + 
-  geom_line(color = DARTHgreen) +
-  ggtitle("Relative computation time") +
-  scale_y_continuous(breaks = number_ticks(7)) +
-  scale_x_continuous(breaks = number_ticks(6)) +
-  xlab("Number of health states") + 
-  ylab("Relative speedup: dynamic / traditional") +
-      theme_bw(base_size = 16) + 
-      theme(legend.position = "bottom")
-
-#ggsave("../figs/2D_time_relative.png")
-
-
-ggplot(data_relative, aes(x = n_states, memory)) +
-  geom_point(color = DARTHgreen) + 
-  geom_line(color = DARTHgreen) +
-  geom_hline(aes(yintercept = 1), color = DARTHgray) +
-  ggtitle("Relative computation memory")+
-  scale_y_continuous(breaks = number_ticks(7)) +
-  scale_x_continuous(breaks = number_ticks(6)) +
-  xlab("Number of health states") + 
-  ylab("Relative memory usage: dynamic / traditional") + #\u0394 is the unicode for Delta
-      theme_bw(base_size = 16) + 
-      theme(legend.position = "bottom")
-
-
-data_relative_combined <- melt(data_relative, id.vars = c("Approach", "n_states", "n_t"))
-
-#ggsave("../figs/2D_memory_relative.png")
-
-
-# Use the facet_wrap to make a figure
-ggplot(data_relative_combined, aes(x = n_states, value), group = variable) +
-  geom_point(color = DARTHgreen) + 
-  geom_line(color = DARTHgreen) +
-  scale_y_continuous(breaks = number_ticks(7)) +
-  scale_x_continuous(breaks = number_ticks(6)) +
-  xlab("Number of health states") + 
-  ylab("Relative: dynamic / traditional") +  
-  facet_wrap(~ variable, scales ="free_y") + 
-    geom_hline(aes(yintercept = 1), color = DARTHgray) +
-      theme_bw(base_size = 16) + 
-      theme(legend.position = "bottom") +
-      theme(strip.background = element_rect(fill = DARTHgreen)) +
-      theme(strip.text = element_text(color = 'white'))
-
-names(data_relative)[names(data_relative) == "time"] <- "Relative time: dynamic/traditional"
-names(data_relative)[names(data_relative) == "memory"] <- "Relative memory: dynamic/traditional"
-
-data_relative_combined_new_names <- melt(data_relative, id.vars = c("Approach", "n_states", "n_t"))
-
-
-data_combined <- rbind(time_mem_both_2D_new, data_relative_combined_new_names)
+data_combined$yint <- 1
+data_combined$yint[data_combined$variable == "Time (in seconds)" | data_combined$variable == "Memory (in MB)"] <- NA
+data_combined$variable <- factor(data_combined$variable,levels(data_combined$variable)[c(4, 3, 1, 2)])
+data_combined$Approach <- factor(data_combined$Approach,levels(data_combined$Approach)[c(2, 3, 1)])
 
 ggplot(data_combined, aes(x = n_states, value), group = variable) +
   geom_point(aes(color = Approach, shape = Approach)) +
@@ -305,16 +248,15 @@ ggplot(data_combined, aes(x = n_states, value), group = variable) +
   scale_x_continuous(breaks = number_ticks(6)) +
   xlab("Number of health states") + 
   ylab(element_blank()) +  
-  facet_wrap(~ variable, scales ="free_y", nrow = 2, 
+  facet_wrap(~variable, scales ="free_y", nrow = 2, 
              labeller = as_labeller(c)) + 
-      theme_bw(base_size = 16) + 
-      theme(legend.position = "bottom", legend.title = element_blank()) +
-      theme(strip.background = element_rect(fill = DARTHgreen)) +
-      theme(strip.text = element_text(color = 'white')) +
-      scale_color_manual(values = c(DARTHgreen, DARTHyellow, DARTHblue))
+  geom_hline(aes(yintercept = yint), linetype = "dashed") + 
+  theme_bw(base_size = 16) + 
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  theme(strip.background = element_rect(fill = DARTHgreen)) +
+  theme(strip.text = element_text(color = 'white')) +
+  scale_color_manual(values = c(DARTHyellow, DARTHblue, DARTHgreen))
 
-ggsave("../figs/time_memory_comparison.png")
+ggsave("../figs/2D_time_memory_comparison.png")
 ```
-
-
 
